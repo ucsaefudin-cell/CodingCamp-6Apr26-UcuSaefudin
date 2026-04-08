@@ -12,59 +12,59 @@
   - [x] 2.2 Implement `themeManager.init()`, `themeManager.toggle()`, and `themeManager.apply(theme)` in `app.js`
   - [x] 2.3 Wire the theme toggle button to `themeManager.toggle()`
 
-- [ ] 3. Greeting Widget
-  - [ ] 3.1 Implement `getGreeting(hour)` pure function mapping hour ranges to greeting strings
-  - [ ] 3.2 Implement `formatDate(date)` pure function returning day-of-week, month, day number, and year
-  - [ ] 3.3 Implement `greetingWidget.init()` that starts the 1-second clock interval and reads stored name
-  - [ ] 3.4 Implement `greetingWidget.tick()` that updates time, date, and greeting DOM elements
+- [x] 3. Greeting Widget
+  - [x] 3.1 Implement `getGreeting(hour)` pure function mapping hour ranges to greeting strings
+  - [x] 3.2 Implement `formatDate(date)` pure function returning day-of-week, month, day number, and year
+  - [x] 3.3 Implement `greetingWidget.init()` that starts the 1-second clock interval and reads stored name
+  - [x] 3.4 Implement `greetingWidget.tick()` that updates time, date, and greeting DOM elements
 
-- [ ] 4. Custom User Name
-  - [ ] 4.1 Add name input field and save button to `index.html` within the greeting section
-  - [ ] 4.2 Implement save handler: trim input, persist non-empty value to `tdl_user_name`, clear storage on whitespace-only input
-  - [ ] 4.3 On page load, pre-populate the name input from `tdl_user_name` in storage
+- [x] 4. Custom User Name
+  - [x] 4.1 Add name input field and save button to `index.html` within the greeting section
+  - [x] 4.2 Implement save handler: trim input, persist non-empty value to `tdl_user_name`, clear storage on whitespace-only input
+  - [x] 4.3 On page load, pre-populate the name input from `tdl_user_name` in storage
 
-- [ ] 5. Timer Widget
-  - [ ] 5.1 Implement `formatTime(seconds)` pure function returning MM:SS string
-  - [ ] 5.2 Implement `timerWidget.init()` setting remaining to 1500 and rendering the display
-  - [ ] 5.3 Implement `timerWidget.start()`, `timerWidget.stop()`, and `timerWidget.tick()`
-  - [ ] 5.4 Implement `timerWidget.reset()` that stops any active interval and restores remaining to 1500
-  - [ ] 5.5 Implement `timerWidget.onComplete()` that stops the timer and shows a visual completion indicator
-  - [ ] 5.6 Implement `timerWidget.setButtonStates(running)` to enable/disable Start, Stop, Reset controls
+- [x] 5. Timer Widget
+  - [x] 5.1 Implement `formatTime(seconds)` pure function returning MM:SS string
+  - [x] 5.2 Implement `timerWidget.init()` setting remaining to 1500 and rendering the display
+  - [x] 5.3 Implement `timerWidget.start()`, `timerWidget.stop()`, and `timerWidget.tick()`
+  - [x] 5.4 Implement `timerWidget.reset()` that stops any active interval and restores remaining to 1500
+  - [x] 5.5 Implement `timerWidget.onComplete()` that stops the timer and shows a visual completion indicator
+  - [x] 5.6 Implement `timerWidget.setButtonStates(running)` to enable/disable Start, Stop, Reset controls
 
-- [ ] 6. Todo Widget — Add Tasks
-  - [ ] 6.1 Add task input field and Add button to `index.html` within the todo section
-  - [ ] 6.2 Implement `todoWidget.validateLabel(label, excludeId)` returning a `ValidationResult`
-  - [ ] 6.3 Implement `todoWidget.addTask(label)` that validates, creates a `Task` object, appends to list, persists, and clears input
-  - [ ] 6.4 Display inline validation message on empty or duplicate submission
+- [x] 6. Todo Widget — Add Tasks
+  - [x] 6.1 Add task input field and Add button to `index.html` within the todo section
+  - [x] 6.2 Implement `todoWidget.validateLabel(label, excludeId)` returning a `ValidationResult`
+  - [x] 6.3 Implement `todoWidget.addTask(label)` that validates, creates a `Task` object, appends to list, persists, and clears input
+  - [x] 6.4 Display inline validation message on empty or duplicate submission
 
-- [ ] 7. Todo Widget — Render, Edit, Complete, Delete
-  - [ ] 7.1 Implement `todoWidget.renderTask(task)` returning a DOM element with label, edit button, completion toggle, and delete button
-  - [ ] 7.2 Implement `todoWidget.renderList()` that re-renders the full task list and shows empty-state message when list is empty
-  - [ ] 7.3 Implement edit mode: replace label with pre-populated input, confirm/cancel controls
-  - [ ] 7.4 Implement `todoWidget.editTask(id, newLabel)` with validation, label update, and persist
-  - [ ] 7.5 Implement `todoWidget.toggleTask(id)` that flips `completed` and persists
-  - [ ] 7.6 Implement `todoWidget.deleteTask(id)` that removes the task and persists
-  - [ ] 7.7 Apply completed-task CSS class (e.g., strikethrough) to visually distinguish completed tasks
+- [x] 7. Todo Widget — Render, Edit, Complete, Delete
+  - [x] 7.1 Implement `todoWidget.renderTask(task)` returning a DOM element with label, edit button, completion toggle, and delete button
+  - [x] 7.2 Implement `todoWidget.renderList()` that re-renders the full task list and shows empty-state message when list is empty
+  - [x] 7.3 Implement edit mode: replace label with pre-populated input, confirm/cancel controls
+  - [x] 7.4 Implement `todoWidget.editTask(id, newLabel)` with validation, label update, and persist
+  - [x] 7.5 Implement `todoWidget.toggleTask(id)` that flips `completed` and persists
+  - [x] 7.6 Implement `todoWidget.deleteTask(id)` that removes the task and persists
+  - [x] 7.7 Apply completed-task CSS class (e.g., strikethrough) to visually distinguish completed tasks
 
-- [ ] 8. Todo Widget — Persistence
-  - [ ] 8.1 Implement `todoWidget.persist()` serialising the tasks array as JSON to `tdl_tasks`
-  - [ ] 8.2 Implement `todoWidget.init()` that reads `tdl_tasks` from storage and calls `renderList()`
+- [x] 8. Todo Widget — Persistence
+  - [x] 8.1 Implement `todoWidget.persist()` serialising the tasks array as JSON to `tdl_tasks`
+  - [x] 8.2 Implement `todoWidget.init()` that reads `tdl_tasks` from storage and calls `renderList()`
 
-- [ ] 9. Links Widget — Add and Display
-  - [ ] 9.1 Add label input, URL input, and Add button to `index.html` within the links section
-  - [ ] 9.2 Implement `linksWidget.validateLink(label, url)` returning a `ValidationResult`
-  - [ ] 9.3 Implement `linksWidget.addLink(label, url)` that validates, creates a `Link` object, appends to list, and persists
-  - [ ] 9.4 Display inline validation messages for empty fields and invalid URL scheme
-  - [ ] 9.5 Implement `linksWidget.renderLink(link)` returning a DOM element with a button (opens URL in new tab) and delete control
-  - [ ] 9.6 Implement `linksWidget.renderPanel()` that re-renders the full links panel
-  - [ ] 9.7 Implement `linksWidget.init()` that reads `tdl_links` from storage and calls `renderPanel()`
+- [x] 9. Links Widget — Add and Display
+  - [x] 9.1 Add label input, URL input, and Add button to `index.html` within the links section
+  - [x] 9.2 Implement `linksWidget.validateLink(label, url)` returning a `ValidationResult`
+  - [x] 9.3 Implement `linksWidget.addLink(label, url)` that validates, creates a `Link` object, appends to list, and persists
+  - [x] 9.4 Display inline validation messages for empty fields and invalid URL scheme
+  - [x] 9.5 Implement `linksWidget.renderLink(link)` returning a DOM element with a button (opens URL in new tab) and delete control
+  - [x] 9.6 Implement `linksWidget.renderPanel()` that re-renders the full links panel
+  - [x] 9.7 Implement `linksWidget.init()` that reads `tdl_links` from storage and calls `renderPanel()`
 
-- [ ] 10. Links Widget — Delete
-  - [ ] 10.1 Implement `linksWidget.deleteLink(id)` that removes the link and persists
-  - [ ] 10.2 Implement `linksWidget.persist()` serialising the links array as JSON to `tdl_links`
+- [x] 10. Links Widget — Delete
+  - [x] 10.1 Implement `linksWidget.deleteLink(id)` that removes the link and persists
+  - [x] 10.2 Implement `linksWidget.persist()` serialising the links array as JSON to `tdl_links`
 
-- [ ] 11. Styling
-  - [ ] 11.1 Implement CSS custom properties for light and dark themes (`[data-theme="dark"]` selector)
+- [-] 11. Styling
+  - [-] 11.1 Implement CSS custom properties for light and dark themes (`[data-theme="dark"]` selector)
   - [ ] 11.2 Style all four widget cards with consistent layout (grid or flexbox)
   - [ ] 11.3 Style completed task items with strikethrough and reduced opacity
   - [ ] 11.4 Style inline validation messages (error colour, small text)
