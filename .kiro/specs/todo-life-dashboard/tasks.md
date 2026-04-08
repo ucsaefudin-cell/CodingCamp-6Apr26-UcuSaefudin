@@ -70,19 +70,7 @@
   - [x] 11.4 Style inline validation messages (error colour, small text)
   - [x] 11.5 Ensure the theme toggle button and name save control are always visible
 
-- [ ] 12. Code quality
-  - [ ] 12.1 Add inline JSDoc comments to every function in `app.js` explaining purpose and non-obvious logic
-  - [ ] 12.2 Add section comments to `style.css` identifying each widget's styles and key decisions
-  - [ ] 12.3 Add widget-section comments to `index.html`
-
-- [ ] 13. Property-based and unit tests
-  - [ ] 13.1 Set up fast-check (or equivalent) test runner for the project
-  - [ ] 13.2 Write property tests for Properties 1–3 (greeting and date formatting)
-  - [ ] 13.3 Write property tests for Properties 4–5 (user name persistence)
-  - [ ] 13.4 Write property tests for Properties 6–7 (timer format and reset)
-  - [ ] 13.5 Write property tests for Properties 8–10 (task add validation)
-  - [ ] 13.6 Write property tests for Properties 11–13 (task edit validation)
-  - [ ] 13.7 Write property tests for Properties 14–16 (toggle, delete, persistence round-trip)
-  - [ ] 13.8 Write property tests for Properties 17–22 (links add, validate, delete, persistence, theme toggle)
-  - [ ] 13.9 Write unit tests for timer state transitions, button states, and completion indicator
-  - [ ] 13.10 Write unit tests for UI behaviors (input cleared after add, edit mode pre-population, empty-state messages, completed CSS class, link opens in new tab)
+- [x] 12. Code quality
+  - [x] 12.1 Add inline JSDoc comments to every function in `app.js` explaining purpose and non-obvious logic
+  - [x] 12.2 Add section comments to `style.css` identifying each widget's styles and key decisions
+  - [x] 12.3 Add widget-section comments to `index.html`

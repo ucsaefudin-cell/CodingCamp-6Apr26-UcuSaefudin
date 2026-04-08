@@ -94,6 +94,9 @@
 
 /* ============================================================
    RESET / BASE
+   Universal box-sizing reset prevents width/padding surprises.
+   Margin and padding are zeroed so spacing is always intentional
+   via the --space-* tokens defined above.
    ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -198,7 +201,11 @@ body {
 
 /* ============================================================
    SHARED FORM CONTROLS
-   Inputs and buttons used across multiple widgets.
+   Inputs and buttons are shared across all four widgets.
+   Using a single set of classes keeps the visual language
+   consistent and reduces duplication. The --accent token
+   drives focus rings and primary button colour so both
+   update automatically when the theme changes.
    ============================================================ */
 .input {
   flex: 1;
@@ -344,13 +351,15 @@ body {
   color: var(--color-text);
 }
 
-/* Visual indicator shown when the session completes */
+/* Visual indicator shown when the Pomodoro session completes (Req 3.6).
+   Uses --color-success so it stands out positively without being alarming. */
 .timer-complete {
   font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--color-success);
 }
 
+/* Flexbox row keeps Start / Stop / Reset buttons evenly spaced. */
 .timer-controls {
   display: flex;
   gap: var(--space-sm);
@@ -404,11 +413,16 @@ body {
   opacity: 0.5;
 }
 
+/* Label text inside each task row.
+   flex:1 lets it grow to fill available space between the
+   checkbox and the action buttons. */
 .todo-item__label {
   flex: 1;
   font-size: var(--font-size-md);
 }
 
+/* Container for the Edit and Delete icon buttons on each task row.
+   Flexbox row with a small gap keeps the buttons tightly grouped. */
 .todo-item__actions {
   display: flex;
   gap: var(--space-xs);
@@ -449,6 +463,10 @@ body {
   transition: background-color 0.3s, border-color 0.3s;
 }
 
+/* The clickable link label inside each link row.
+   Styled as an underlined accent-coloured button (not an <a> tag)
+   so it can be activated via JS and opened with noopener,noreferrer
+   for security (Req 8.5). flex:1 lets it fill the row. */
 .link-item__btn {
   flex: 1;
   text-align: left;
