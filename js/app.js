@@ -964,6 +964,82 @@ const linksWidget = {
 };
 
 /* ============================================================
+   QUOTES WIDGET
+   Displays a random motivational quote (English) related to
+   office work and professional productivity.
+   Quotes are hardcoded — no external API is used.
+   A new quote is shown on page load and then rotated every
+   1 minute via setInterval. (task 18)
+   ============================================================ */
+
+/**
+ * @namespace quotesWidget
+ */
+const quotesWidget = {
+  /**
+   * Hardcoded array of English motivational quotes about
+   * office work, workplace productivity, and professional motivation.
+   *
+   * @type {string[]}
+   */
+  quotes: [
+    '"Hard work today is the best investment for your future."',
+    '"Productivity isn\'t about how busy you are, but how effectively you work."',
+    '"Every completed task is one step closer to your goals."',
+    '"Professionalism is doing your best work even when no one is watching."',
+    '"Focus on the process, and the results will take care of themselves."',
+    '"Good collaboration in the workplace is the key to shared success."',
+    '"Don\'t delay today\'s work — time is an asset that can never be recovered."',
+    '"The secret of getting ahead is getting started."',
+    '"Success is the sum of small efforts, repeated day in and day out."',
+    '"Great things are not done by impulse, but by a series of small things brought together."',
+    '"Don\'t watch the clock; do what it does. Keep going."',
+    '"The only way to do great work is to love what you do."',
+  ],
+
+  /**
+   * Return a random quote from the quotes array.
+   *
+   * How the randomizer works:
+   *   Math.random() returns a float in [0, 1).
+   *   Multiplying by the array length gives a float in [0, length).
+   *   Math.floor() truncates it to a valid integer index. (task 15.3)
+   *
+   * @returns {string} A randomly selected quote.
+   */
+  getRandomQuote() {
+    // Math.floor(Math.random() * n) gives a uniform random integer in [0, n-1]
+    const index = Math.floor(Math.random() * this.quotes.length);
+    return this.quotes[index];
+  },
+
+  /**
+   * Initialise the quotes widget.
+   * Displays a random quote immediately on page load, then uses
+   * setInterval to swap to a new random quote every 1 minute.
+   *
+   * Why setInterval?
+   *   setInterval(fn, ms) calls fn repeatedly every ms milliseconds
+   *   for the lifetime of the page — perfect for periodic UI updates
+   *   that don't need to be cancelled. 60,000 ms = 1 minute. (task 18.2)
+   */
+  init() {
+    const el = document.getElementById('quotes-text');
+    if (!el) return;
+
+    // Show a random quote immediately on load
+    el.textContent = this.getRandomQuote();
+
+    // Rotate to a new random quote every 1 minute (60,000 ms).
+    // setInterval keeps firing at the given interval until the page
+    // is closed or the interval is explicitly cleared with clearInterval().
+    setInterval(() => {
+      el.textContent = this.getRandomQuote();
+    }, 60_000); // 60,000 ms = 1 minute
+  },
+};
+
+/* ============================================================
    ENTRY POINT
    Called once the DOM is fully parsed.
    Initialises all widgets in dependency order.
@@ -980,6 +1056,7 @@ function init() {
   timerWidget.init();
   todoWidget.init();
   linksWidget.init();
+  quotesWidget.init();
 }
 
 document.addEventListener('DOMContentLoaded', init);

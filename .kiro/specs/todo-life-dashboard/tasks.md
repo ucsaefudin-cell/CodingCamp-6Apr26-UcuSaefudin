@@ -74,3 +74,39 @@
   - [x] 12.1 Add inline JSDoc comments to every function in `app.js` explaining purpose and non-obvious logic
   - [x] 12.2 Add section comments to `style.css` identifying each widget's styles and key decisions
   - [x] 12.3 Add widget-section comments to `index.html`
+
+---
+
+## Group 2 — Personal Improvements & Layout Fixes
+
+- [x] 13. Fix layout and center greeting section
+  - [x] 13.1 Add `max-width: 1200px` and `margin: 0 auto` to `.dashboard-grid` (or a new `.dashboard-container` wrapper) so the content is centered with equal space on both sides
+  - [x] 13.2 Add `text-align: center` to `.widget--greeting` so the time, date, and greeting text are center-aligned
+
+- [x] 14. Add Header and Footer
+  - [x] 14.1 Update the existing `<header>` in `index.html` to display "Life Dashboard with RevoU" as the title text
+  - [x] 14.2 Add a `<footer>` element at the bottom of `<body>` in `index.html` with copyright text "© 2026 Ucu. All rights reserved."
+  - [x] 14.3 Add CSS for the footer: minimal styling, centered text, muted color, small font, and a top border to separate it from the content
+
+- [x] 15. Motivational Quotes Section
+  - [x] 15.1 Add a `<section>` for the quotes widget in `index.html` inside `<main>`, spanning full width (similar to the greeting widget)
+  - [x] 15.2 In `app.js`, define a `quotesWidget` object with a hardcoded array of at least 5 Indonesian motivational quotes related to office work and professional productivity
+  - [x] 15.3 Implement `quotesWidget.getRandomQuote()` that returns a random quote from the array using `Math.random()`
+  - [x] 15.4 Implement `quotesWidget.init()` that displays a random quote on load and uses `setInterval` (600,000 ms) to rotate to a new random quote every 10 minutes; add clear comments explaining the `setInterval` and array randomizer logic
+  - [x] 15.5 Add CSS for the quotes section: centered text, italic style, accent color for the quote text, matching the existing "Simplicity" visual design
+
+---
+
+## Group 3 — UI Finalization
+
+- [x] 16. Remove header and relocate theme toggle
+  - [x] 16.1 Delete the `<header class="dashboard-header">` element and its contents from `index.html`
+  - [x] 16.2 Remove `.dashboard-header`, `.dashboard-title`, and `.header-module` CSS rules from `style.css`
+  - [x] 16.3 Move the theme toggle `<button>` inside `.widget--greeting` in `index.html`; position it absolutely in the top-right corner of the greeting card
+
+- [x] 17. Enhance greeting message styling
+  - [x] 17.1 Add `text-transform: uppercase`, `letter-spacing: 2px`, and `font-weight: 800` to `.greeting-message` in `style.css`
+
+- [x] 18. Update motivational quotes
+  - [x] 18.1 Replace the quotes array in `quotesWidget` with the new English quotes array (12 quotes)
+  - [x] 18.2 Change the `setInterval` delay from 600,000 ms to 60,000 ms (1 minute)

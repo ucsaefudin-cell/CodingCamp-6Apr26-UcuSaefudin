@@ -133,42 +133,19 @@ body {
 }
 
 /* ============================================================
-   DASHBOARD HEADER / TOOLBAR
-   Contains the app title and the always-visible theme toggle.
-   Sticky so the toggle is accessible at all scroll positions.
-   (task 11.5)
-   ============================================================ */
-.dashboard-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-sm) var(--space-md);
-  margin-bottom: var(--space-lg);
-  background-color: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  /* Sticky positioning keeps the toggle always visible (task 11.5) */
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  transition: background-color 0.3s, border-color 0.3s;
-}
-
-.dashboard-title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-/* ============================================================
    DASHBOARD GRID LAYOUT
    Two-column grid on desktop, single column on mobile.
-   (task 11.2)
+   max-width + margin: 0 auto keeps the grid centered with equal
+   space on both sides regardless of viewport width. (task 13.1)
    ============================================================ */
 .dashboard-grid {
   display: grid;
   /* Explicit 2-column layout on desktop */
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-lg);
+  /* Center the grid and cap its width (task 13.1) */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Single-column layout on mobile (task 11.2) */
@@ -294,13 +271,27 @@ body {
    GREETING WIDGET
    Spans full width across both grid columns. (task 11.2)
    Displays live clock, date, greeting message, and name form.
+   text-align: center keeps the time, date, and greeting centered. (task 13.2)
+   position: relative is the anchor for the absolutely-positioned
+   theme toggle button. (task 16.3)
    ============================================================ */
 .widget--greeting {
   /* Full-width span across both columns (task 11.2) */
   grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
+  align-items: center;   /* center children horizontally (task 13.2) */
+  text-align: center;    /* center inline text (task 13.2) */
   gap: var(--space-sm);
+  /* Anchor for the absolutely-positioned theme toggle (task 16.3) */
+  position: relative;
+}
+
+/* Theme toggle pinned to the top-right corner of the greeting card (task 16.3) */
+.greeting-theme-toggle {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
 }
 
 .greeting-time {
@@ -317,9 +308,11 @@ body {
 
 .greeting-message {
   font-size: var(--font-size-xl);
-  font-weight: 600;
+  font-weight: 800;
   color: var(--accent);
   margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 /* Name form: flexbox row, always visible (task 11.5) */
@@ -482,4 +475,52 @@ body {
 
 .link-item__btn:hover {
   color: var(--accent-hover);
+}
+
+/* ============================================================
+   FOOTER
+   Minimal, unobtrusive footer at the bottom of the page.
+   Centered text, muted color, small font, and a top border
+   to visually separate it from the main content. (task 14.3)
+   ============================================================ */
+.dashboard-footer {
+  text-align: center;
+  padding: var(--space-md);
+  margin-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+/* ============================================================
+   QUOTES WIDGET
+   Full-width section spanning both grid columns.
+   Centered, italic quote text in accent color to match the
+   existing "Simplicity" visual design. (task 15.5)
+   ============================================================ */
+.widget--quotes {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-sm);
+}
+
+.quotes-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+/* The quote text itself: italic, accent color, slightly larger */
+.quotes-text {
+  font-size: var(--font-size-lg);
+  font-style: italic;
+  color: var(--accent);
+  max-width: 700px;
+  line-height: 1.6;
 }
