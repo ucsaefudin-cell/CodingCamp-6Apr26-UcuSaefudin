@@ -63,12 +63,12 @@
   - [x] 10.1 Implement `linksWidget.deleteLink(id)` that removes the link and persists
   - [x] 10.2 Implement `linksWidget.persist()` serialising the links array as JSON to `tdl_links`
 
-- [-] 11. Styling
-  - [-] 11.1 Implement CSS custom properties for light and dark themes (`[data-theme="dark"]` selector)
-  - [ ] 11.2 Style all four widget cards with consistent layout (grid or flexbox)
-  - [ ] 11.3 Style completed task items with strikethrough and reduced opacity
-  - [ ] 11.4 Style inline validation messages (error colour, small text)
-  - [ ] 11.5 Ensure the theme toggle button and name save control are always visible
+- [x] 11. Styling
+  - [x] 11.1 Implement CSS custom properties for light and dark themes (`[data-theme="dark"]` selector)
+  - [x] 11.2 Style all four widget cards with consistent layout (grid or flexbox)
+  - [x] 11.3 Style completed task items with strikethrough and reduced opacity
+  - [x] 11.4 Style inline validation messages (error colour, small text)
+  - [x] 11.5 Ensure the theme toggle button and name save control are always visible
 
 - [ ] 12. Code quality
   - [ ] 12.1 Add inline JSDoc comments to every function in `app.js` explaining purpose and non-obvious logic

@@ -2,20 +2,35 @@
    CSS CUSTOM PROPERTIES — LIGHT THEME (default)
    All colour and spacing tokens live here so every widget
    can reference them without hard-coding values.
+
+   Shorthand aliases (--bg, --surface, --text, etc.) are
+   provided alongside the full --color-* names so both
+   naming conventions work throughout the stylesheet.
    ============================================================ */
 :root {
-  /* Colours */
-  --color-bg:          #f5f5f5;
-  --color-surface:     #ffffff;
-  --color-border:      #e0e0e0;
-  --color-text:        #1a1a1a;
-  --color-text-muted:  #666666;
-  --color-primary:     #4a6cf7;
+  /* Colours — full names */
+  --color-bg:            #f5f5f5;
+  --color-surface:       #ffffff;
+  --color-border:        #e0e0e0;
+  --color-text:          #1a1a1a;
+  --color-text-muted:    #666666;
+  --color-primary:       #4a6cf7;
   --color-primary-hover: #3a5ce6;
-  --color-secondary:   #6c757d;
-  --color-error:       #d32f2f;
-  --color-success:     #388e3c;
-  --color-completed:   #9e9e9e;
+  --color-secondary:     #6c757d;
+  --color-error:         #d32f2f;
+  --color-success:       #388e3c;
+  --color-completed:     #9e9e9e;
+
+  /* Shorthand aliases — required by task 11.1 */
+  --bg:           var(--color-bg);
+  --surface:      var(--color-surface);
+  --text:         var(--color-text);
+  --text-muted:   var(--color-text-muted);
+  --border:       var(--color-border);
+  --accent:       var(--color-primary);
+  --accent-hover: var(--color-primary-hover);
+  --danger:       var(--color-error);
+  --shadow:       var(--shadow-md);
 
   /* Spacing */
   --space-xs:  0.25rem;
@@ -25,7 +40,7 @@
   --space-xl:  2rem;
 
   /* Typography */
-  --font-family: system-ui, -apple-system, sans-serif;
+  --font-family:   system-ui, -apple-system, sans-serif;
   --font-size-sm:  0.875rem;
   --font-size-md:  1rem;
   --font-size-lg:  1.25rem;
@@ -48,17 +63,31 @@
    Only colour tokens need to change — layout tokens stay.
    ============================================================ */
 [data-theme="dark"] {
-  --color-bg:          #121212;
-  --color-surface:     #1e1e1e;
-  --color-border:      #333333;
-  --color-text:        #e8e8e8;
-  --color-text-muted:  #aaaaaa;
-  --color-primary:     #7b9cff;
+  /* Colours — full names */
+  --color-bg:            #1a1a2e;
+  --color-surface:       #16213e;
+  --color-border:        #0f3460;
+  --color-text:          #e8e8e8;
+  --color-text-muted:    #aaaaaa;
+  --color-primary:       #7b9cff;
   --color-primary-hover: #9ab3ff;
-  --color-secondary:   #9e9e9e;
-  --color-error:       #ef5350;
-  --color-success:     #66bb6a;
-  --color-completed:   #616161;
+  --color-secondary:     #9e9e9e;
+  --color-error:         #ef5350;
+  --color-success:       #66bb6a;
+  --color-completed:     #616161;
+
+  /* Shorthand aliases — mirror the full names */
+  --bg:           var(--color-bg);
+  --surface:      var(--color-surface);
+  --text:         var(--color-text);
+  --text-muted:   var(--color-text-muted);
+  --border:       var(--color-border);
+  --accent:       var(--color-primary);
+  --accent-hover: var(--color-primary-hover);
+  --danger:       var(--color-error);
+  --shadow:       var(--shadow-md);
+
+  /* Shadows — darker in dark mode */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
@@ -83,6 +112,8 @@ body {
   color: var(--color-text);
   min-height: 100vh;
   padding: var(--space-md);
+  /* Smooth theme transitions (task 11.1) */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Screen-reader only utility */
@@ -99,14 +130,24 @@ body {
 }
 
 /* ============================================================
-   DASHBOARD HEADER
+   DASHBOARD HEADER / TOOLBAR
    Contains the app title and the always-visible theme toggle.
+   Sticky so the toggle is accessible at all scroll positions.
+   (task 11.5)
    ============================================================ */
 .dashboard-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
   margin-bottom: var(--space-lg);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  /* Sticky positioning keeps the toggle always visible (task 11.5) */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .dashboard-title {
@@ -117,23 +158,35 @@ body {
 
 /* ============================================================
    DASHBOARD GRID LAYOUT
-   Four widget cards arranged in a responsive grid.
+   Two-column grid on desktop, single column on mobile.
+   (task 11.2)
    ============================================================ */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* Explicit 2-column layout on desktop */
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-lg);
+}
+
+/* Single-column layout on mobile (task 11.2) */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ============================================================
    WIDGET CARD — shared styles for all four widgets
+   Uses --surface, --border, --shadow variables. (task 11.2)
    ============================================================ */
 .widget {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow);
+  /* Smooth theme transitions (task 11.1) */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .widget-title {
@@ -150,18 +203,18 @@ body {
 .input {
   flex: 1;
   padding: var(--space-sm) var(--space-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--surface);
+  color: var(--text);
   font-size: var(--font-size-md);
   font-family: var(--font-family);
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background-color 0.3s, color 0.3s;
 }
 
 .input:focus {
-  border-color: var(--color-primary);
+  border-color: var(--accent);
 }
 
 .btn {
@@ -179,13 +232,14 @@ body {
   cursor: not-allowed;
 }
 
+/* Primary button uses --accent and --accent-hover (task 11.1) */
 .btn--primary {
-  background-color: var(--color-primary);
+  background-color: var(--accent);
   color: #ffffff;
 }
 
 .btn--primary:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
+  background-color: var(--accent-hover);
 }
 
 .btn--secondary {
@@ -195,35 +249,48 @@ body {
 
 .btn--icon {
   background: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-lg);
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--text);
+  transition: border-color 0.15s, color 0.3s;
 }
 
-/* Inline validation messages — error colour, small text */
+/* ============================================================
+   VALIDATION MESSAGES
+   Inline error messages adjacent to form inputs. (task 11.4)
+   Uses --danger variable for error colour.
+   ============================================================ */
 .validation-message {
-  font-size: var(--font-size-sm);
-  color: var(--color-error);
+  display: block;
+  font-size: 0.85rem;
+  color: var(--danger);
   min-height: 1.2em;
-  margin-top: var(--space-xs);
+  margin-top: 4px;
 }
 
-/* Empty-state messages shown when a list has no items */
+/* ============================================================
+   EMPTY-STATE MESSAGES
+   Shown when a list has no items. (task 11.1)
+   ============================================================ */
 .empty-state {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   text-align: center;
   padding: var(--space-md) 0;
+  font-style: italic;
 }
 
 /* ============================================================
    GREETING WIDGET
+   Spans full width across both grid columns. (task 11.2)
    Displays live clock, date, greeting message, and name form.
    ============================================================ */
 .widget--greeting {
+  /* Full-width span across both columns (task 11.2) */
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
@@ -244,13 +311,15 @@ body {
 .greeting-message {
   font-size: var(--font-size-xl);
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--accent);
   margin-bottom: var(--space-sm);
 }
 
+/* Name form: flexbox row, always visible (task 11.5) */
 .greeting-name-form {
   display: flex;
   gap: var(--space-sm);
+  flex-wrap: wrap;
   margin-top: var(--space-sm);
 }
 
@@ -265,9 +334,11 @@ body {
   gap: var(--space-md);
 }
 
+/* Large monospace font for the timer display (task 11.1) */
 .timer-display {
   font-size: var(--font-size-2xl);
   font-weight: 700;
+  font-family: 'Courier New', Courier, monospace;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.05em;
   color: var(--color-text);
@@ -314,18 +385,23 @@ body {
   gap: var(--space-sm);
   padding: var(--space-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* Completed tasks: strikethrough and reduced opacity.
+/* ============================================================
+   COMPLETED TASK STYLES
+   Strikethrough and reduced opacity on the label. (task 11.3)
    Both .todo-item--completed and .task--completed are supported
-   so JS can apply either class (Req 6.3). */
+   so JS can apply either class (Req 6.3).
+   ============================================================ */
 .todo-item--completed .todo-item__label,
-.task--completed .todo-item__label {
+.task--completed .todo-item__label,
+.completed .todo-item__label {
   text-decoration: line-through;
   color: var(--color-completed);
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 .todo-item__label {
@@ -368,8 +444,9 @@ body {
   gap: var(--space-sm);
   padding: var(--space-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .link-item__btn {
@@ -377,7 +454,7 @@ body {
   text-align: left;
   background: none;
   border: none;
-  color: var(--color-primary);
+  color: var(--accent);
   font-size: var(--font-size-md);
   cursor: pointer;
   text-decoration: underline;
@@ -386,5 +463,5 @@ body {
 }
 
 .link-item__btn:hover {
-  color: var(--color-primary-hover);
+  color: var(--accent-hover);
 }
