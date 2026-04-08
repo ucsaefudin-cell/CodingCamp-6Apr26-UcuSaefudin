@@ -110,3 +110,30 @@
 - [x] 18. Update motivational quotes
   - [x] 18.1 Replace the quotes array in `quotesWidget` with the new English quotes array (12 quotes)
   - [x] 18.2 Change the `setInterval` delay from 600,000 ms to 60,000 ms (1 minute)
+
+---
+
+## Group 4 — Inline Name Editing UX
+
+- [x] 19. Replace name form with inline editable span
+  - [x] 19.1 Remove the `.greeting-name-form` div (input + Save button) from `index.html`
+  - [x] 19.2 Restructure `#greeting-message` to render as `"GOOD NIGHT, <span id="userNameDisplay">Name</span>"` — the span holds only the name portion
+  - [x] 19.3 Add CSS for `#userNameDisplay`: pointer cursor, dashed underline on hover, smooth opacity transition for edit-mode feedback
+  - [x] 19.4 Rewrite `greetingWidget.init()` and `tick()` in `app.js` to use the inline span instead of the old input/save-button pattern
+  - [x] 19.5 Implement click-to-edit: on click, set `contenteditable="true"` on the span, select all text, and add `--editing` CSS class
+  - [x] 19.6 On `blur` or `Enter` keydown: trim the text, persist to localStorage, update `_name`, remove `contenteditable`, remove `--editing` class; prevent newlines on Enter
+
+---
+
+## Group 5 — Layout Balance & Quick Links Pill Redesign
+
+- [x] 20. Fix two-column height balance
+  - [x] 20.1 Wrap the Timer and Links widgets in a `.col-left` flex column container in `index.html`; wrap the Todo widget in a `.col-right` container
+  - [x] 20.2 In CSS, make `.col-left` a flex column so the Links card (`flex-grow: 1`) stretches to fill remaining height after the fixed-height Timer card
+  - [x] 20.3 Remove the old `grid-template-columns` two-column rule and replace with a three-area grid: greeting (full), col-left, col-right, quotes (full)
+
+- [x] 21. Redesign Quick Links as horizontal pills
+  - [x] 21.1 Change `.links-list` to `display: flex; flex-wrap: wrap; gap: 10px` in CSS
+  - [x] 21.2 Style `.link-item` as a solid-accent pill (background, white text, rounded, padding, no border)
+  - [x] 21.3 Style `.link-item__btn` as plain white text inside the pill (no underline, no background)
+  - [x] 21.4 Replace the 🗑️ delete button with a compact `×` button styled inline inside the pill in `renderLink()`

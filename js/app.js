@@ -158,55 +158,37 @@ const greetingWidget = {
   /**
    * Initialise the greeting widget.
    * Reads the stored user name, starts the 1-second clock interval,
-   * and performs an immediate tick so the UI is populated at once.
-   * (Req 1.1, 1.7, 1.8)
+   * and wires the inline contenteditable name span for click-to-edit.
+   * (Req 1.1, 1.7, 1.8, task 19.4–19.6)
    */
   init() {
-    // Read stored name so tick() can append it to the greeting
+    // Read stored name so tick() can render it immediately
     const stored = storage.get(KEYS.USER_NAME);
-    this._name = (typeof stored === 'string') ? stored : '';
+    this._name = (typeof stored === 'string' && stored.trim()) ? stored.trim() : '';
 
-    // Populate the name input field with the stored value (Req 2.3)
-    const nameInput = document.getElementById('name-input');
-    if (nameInput) nameInput.value = this._name;
-
-    // Immediate tick so the clock shows the correct time right away
+    // Immediate tick so the clock and greeting are populated at once
     this.tick();
 
     // Start the 1-second interval — lives for the page lifetime (Req 1.1)
     setInterval(() => this.tick(), 1000);
 
-    // Wire the Save button for the user name (Req 2.1, 2.2, 2.4)
-    const saveBtn = document.getElementById('name-save');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-        const input = document.getElementById('name-input');
-        const trimmed = input ? input.value.trim() : '';
-        if (trimmed) {
-          // Non-empty: persist and update cached name
-          storage.set(KEYS.USER_NAME, trimmed);
-          this._name = trimmed;
-        } else {
-          // Whitespace-only or empty: clear stored name
-          storage.remove(KEYS.USER_NAME);
-          this._name = '';
-        }
-        // Re-render greeting immediately with updated name
-        this.tick();
-      });
+    // Wire the inline name span for click-to-edit (task 19.5)
+    const nameSpan = document.getElementById('userNameDisplay');
+    if (nameSpan) {
+      nameSpan.addEventListener('click', () => this._enterInlineEdit(nameSpan));
     }
   },
 
   /**
    * Called every second by the clock interval.
    * Updates the time, date, and greeting DOM elements.
-   * (Req 1.1, 1.2, 1.3–1.8)
+   * Splits the greeting into a base part and the name span so the
+   * name remains independently editable. (Req 1.1, 1.2, 1.3–1.8)
    */
   tick() {
     const now = new Date();
 
     // --- Time display (Req 1.1) ---
-    // Format as HH:MM:SS using locale-independent zero-padding
     const hh = String(now.getHours()).padStart(2, '0');
     const mm = String(now.getMinutes()).padStart(2, '0');
     const ss = String(now.getSeconds()).padStart(2, '0');
@@ -218,10 +200,91 @@ const greetingWidget = {
     if (dateEl) dateEl.textContent = this.formatDate(now);
 
     // --- Greeting message (Req 1.3–1.8) ---
+    // The base span holds "GOOD MORNING" or "GOOD MORNING, " (with comma+space when a name exists).
+    // The name span holds only the name so it stays independently editable.
     const base = this.getGreeting(now.getHours());
-    const message = this._name ? `${base}, ${this._name}` : base;
-    const msgEl = document.getElementById('greeting-message');
-    if (msgEl) msgEl.textContent = message;
+    const baseEl = document.getElementById('greeting-base');
+    const nameSpan = document.getElementById('userNameDisplay');
+
+    // Only update the base text — never overwrite the name span while it is being edited
+    if (baseEl) {
+      baseEl.textContent = this._name ? `${base}, ` : base;
+    }
+    // Only set the name span text when it is NOT in edit mode
+    if (nameSpan && nameSpan.contentEditable !== 'true') {
+      nameSpan.textContent = this._name;
+    }
+  },
+
+  /**
+   * Enter inline edit mode on the name span.
+   * Sets contenteditable="true", selects all text, and adds the
+   * --editing CSS class. Wires blur and Enter to commit the edit.
+   * (task 19.5, 19.6)
+   *
+   * @param {HTMLElement} span - The #userNameDisplay span element.
+   */
+  _enterInlineEdit(span) {
+    // Guard: don't re-enter if already editing
+    if (span.contentEditable === 'true') return;
+
+    // If no name yet, seed the span with a placeholder so the user
+    // has something to select and overwrite
+    if (!span.textContent.trim()) {
+      span.textContent = this._name || 'Your name';
+    }
+
+    span.contentEditable = 'true';
+    span.classList.add('greeting-name-inline--editing');
+    span.focus();
+
+    // Select all text so the user can type immediately without backspacing
+    const range = document.createRange();
+    range.selectNodeContents(span);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    // Commit on Enter (prevent newline), cancel on Escape (task 19.6)
+    const onKeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // block <br> insertion
+        span.blur();        // triggers the blur handler below
+      }
+      if (e.key === 'Escape') {
+        // Restore original name and exit without saving
+        span.textContent = this._name;
+        exitEdit();
+      }
+    };
+
+    // Commit on blur — fires when user clicks away or presses Enter (task 19.6)
+    const onBlur = () => {
+      const trimmed = span.textContent.trim();
+      if (trimmed && trimmed !== 'Your name') {
+        // Persist and cache the new name
+        storage.set(KEYS.USER_NAME, trimmed);
+        this._name = trimmed;
+      } else {
+        // Empty or placeholder — clear stored name
+        storage.remove(KEYS.USER_NAME);
+        this._name = '';
+        span.textContent = '';
+      }
+      exitEdit();
+      // Re-render base text immediately with updated name
+      this.tick();
+    };
+
+    const exitEdit = () => {
+      span.contentEditable = 'false';
+      span.classList.remove('greeting-name-inline--editing');
+      span.removeEventListener('keydown', onKeydown);
+      span.removeEventListener('blur', onBlur);
+    };
+
+    span.addEventListener('keydown', onKeydown);
+    span.addEventListener('blur', onBlur);
   },
 
   /**
@@ -921,8 +984,8 @@ const linksWidget = {
 
   /**
    * Build and return a DOM element representing a single link.
-   * Includes a button that opens the URL in a new tab (Req 8.5)
-   * and a delete control.
+   * Rendered as a horizontal pill: label button on the left,
+   * compact × delete button on the right. (task 21.4, Req 8.5)
    *
    * @param {{ id: string, label: string, url: string }} link
    * @returns {HTMLElement} An <li> element for the link.
@@ -941,10 +1004,10 @@ const linksWidget = {
       window.open(link.url, '_blank', 'noopener,noreferrer');
     });
 
-    // --- Delete button ---
+    // --- × delete button: compact, inline inside the pill (task 21.4) ---
     const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn--icon';
-    deleteBtn.textContent = '🗑️';
+    deleteBtn.className = 'link-item__delete';
+    deleteBtn.textContent = '×';
     deleteBtn.setAttribute('aria-label', `Delete link: ${link.label}`);
     deleteBtn.addEventListener('click', () => this.deleteLink(link.id));
 

@@ -27,94 +27,101 @@
       <button id="theme-toggle" class="btn btn--icon greeting-theme-toggle" aria-label="Toggle theme">🌙</button>
       <div id="greeting-time" class="greeting-time">00:00:00</div>
       <div id="greeting-date" class="greeting-date">Loading date…</div>
-      <div id="greeting-message" class="greeting-message">Hello</div>
-
-      <!-- User name input and save control -->
-      <div class="greeting-name-form">
-        <label for="name-input" class="sr-only">Your name</label>
-        <input
-          type="text"
-          id="name-input"
-          class="input"
-          placeholder="Enter your name"
-          maxlength="50"
-          aria-label="Your name"
-        />
-        <button id="name-save" class="btn btn--primary">Save</button>
+      <!-- Greeting message: base text + clickable inline name span -->
+      <!-- The JS splits the greeting into base ("GOOD NIGHT,") and the name span -->
+      <div id="greeting-message" class="greeting-message">
+        <span id="greeting-base"></span><span
+          id="userNameDisplay"
+          class="greeting-name-inline"
+          title="Klik untuk ganti nama"
+          aria-label="Klik untuk ganti nama"
+        ></span>
       </div>
     </section>
     <!-- ===== END GREETING WIDGET ===== -->
 
-    <!-- ===== TIMER WIDGET ===== -->
-    <section class="widget widget--timer" aria-label="Focus timer">
-      <h2 class="widget-title">Focus Timer</h2>
-      <div id="timer-display" class="timer-display" aria-live="polite">25:00</div>
-      <div id="timer-complete" class="timer-complete" hidden>Session complete!</div>
+    <!-- ===== LEFT COLUMN: Timer (fixed height) + Links (stretches to fill) ===== -->
+    <div class="col-left">
 
-      <!-- Timer controls: Start, Stop, Reset -->
-      <div class="timer-controls">
-        <button id="timer-start" class="btn btn--primary">Start</button>
-        <button id="timer-stop"  class="btn btn--secondary" disabled>Stop</button>
-        <button id="timer-reset" class="btn btn--secondary" disabled>Reset</button>
-      </div>
-    </section>
-    <!-- ===== END TIMER WIDGET ===== -->
+      <!-- ===== TIMER WIDGET ===== -->
+      <section class="widget widget--timer" aria-label="Focus timer">
+        <h2 class="widget-title">Focus Timer</h2>
+        <div id="timer-display" class="timer-display" aria-live="polite">25:00</div>
+        <div id="timer-complete" class="timer-complete" hidden>Session complete!</div>
 
-    <!-- ===== TODO WIDGET ===== -->
-    <section class="widget widget--todo" aria-label="To-do list">
-      <h2 class="widget-title">Tasks</h2>
+        <!-- Timer controls: Start, Stop, Reset -->
+        <div class="timer-controls">
+          <button id="timer-start" class="btn btn--primary">Start</button>
+          <button id="timer-stop"  class="btn btn--secondary" disabled>Stop</button>
+          <button id="timer-reset" class="btn btn--secondary" disabled>Reset</button>
+        </div>
+      </section>
+      <!-- ===== END TIMER WIDGET ===== -->
 
-      <!-- Task input and Add control -->
-      <div class="todo-add-form">
-        <label for="todo-input" class="sr-only">New task</label>
-        <input
-          type="text"
-          id="todo-input"
-          class="input"
-          placeholder="Add a task…"
-          aria-label="New task"
-        />
-        <button id="todo-add" class="btn btn--primary">Add</button>
-      </div>
-      <div id="todo-validation" class="validation-message" role="alert" aria-live="polite"></div>
+      <!-- ===== LINKS WIDGET ===== -->
+      <section class="widget widget--links" aria-label="Quick links">
+        <h2 class="widget-title">Quick Links</h2>
 
-      <!-- Task list rendered by JS -->
-      <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
-      <p id="todo-empty" class="empty-state" hidden>No tasks yet. Add one above.</p>
-    </section>
-    <!-- ===== END TODO WIDGET ===== -->
+        <!-- Label + URL inputs and Add control -->
+        <div class="links-add-form">
+          <label for="link-label-input" class="sr-only">Link label</label>
+          <input
+            type="text"
+            id="link-label-input"
+            class="input"
+            placeholder="Label"
+            aria-label="Link label"
+          />
+          <label for="link-url-input" class="sr-only">URL</label>
+          <input
+            type="url"
+            id="link-url-input"
+            class="input"
+            placeholder="https://example.com"
+            aria-label="URL"
+          />
+          <button id="links-add" class="btn btn--primary">Add</button>
+        </div>
+        <div id="links-validation" class="validation-message" role="alert" aria-live="polite"></div>
 
-    <!-- ===== LINKS WIDGET ===== -->
-    <section class="widget widget--links" aria-label="Quick links">
-      <h2 class="widget-title">Quick Links</h2>
+        <!-- Links panel rendered by JS as horizontal pills -->
+        <ul id="links-list" class="links-list" aria-label="Quick links list"></ul>
+        <p id="links-empty" class="empty-state">No links yet. Add one above.</p>
+      </section>
+      <!-- ===== END LINKS WIDGET ===== -->
 
-      <!-- Label + URL inputs and Add control -->
-      <div class="links-add-form">
-        <label for="link-label-input" class="sr-only">Link label</label>
-        <input
-          type="text"
-          id="link-label-input"
-          class="input"
-          placeholder="Label"
-          aria-label="Link label"
-        />
-        <label for="link-url-input" class="sr-only">URL</label>
-        <input
-          type="url"
-          id="link-url-input"
-          class="input"
-          placeholder="https://example.com"
-          aria-label="URL"
-        />
-        <button id="links-add" class="btn btn--primary">Add</button>
-      </div>
-      <div id="links-validation" class="validation-message" role="alert" aria-live="polite"></div>
+    </div>
+    <!-- ===== END LEFT COLUMN ===== -->
 
-      <!-- Links panel rendered by JS -->
-      <ul id="links-list" class="links-list" aria-label="Quick links list"></ul>
-      <p id="links-empty" class="empty-state">No links yet. Add one above.</p>
-    </section>
-    <!-- ===== END LINKS WIDGET ===== -->
+    <!-- ===== RIGHT COLUMN: Tasks ===== -->
+    <div class="col-right">
+
+      <!-- ===== TODO WIDGET ===== -->
+      <section class="widget widget--todo" aria-label="To-do list">
+        <h2 class="widget-title">Tasks</h2>
+
+        <!-- Task input and Add control -->
+        <div class="todo-add-form">
+          <label for="todo-input" class="sr-only">New task</label>
+          <input
+            type="text"
+            id="todo-input"
+            class="input"
+            placeholder="Add a task…"
+            aria-label="New task"
+          />
+          <button id="todo-add" class="btn btn--primary">Add</button>
+        </div>
+        <div id="todo-validation" class="validation-message" role="alert" aria-live="polite"></div>
+
+        <!-- Task list rendered by JS -->
+        <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
+        <p id="todo-empty" class="empty-state" hidden>No tasks yet. Add one above.</p>
+      </section>
+      <!-- ===== END TODO WIDGET ===== -->
+
+    </div>
+    <!-- ===== END RIGHT COLUMN ===== -->
 
     <!-- ===== QUOTES WIDGET ===== -->
     <!-- Full-width motivational quotes section; content rotated by JS every 10 minutes -->
