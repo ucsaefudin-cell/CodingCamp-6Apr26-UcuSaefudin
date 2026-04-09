@@ -142,10 +142,10 @@
 
 ## Group 6 — Name Placeholder & Daily Wish Feature
 
-- [ ] 22. Fix name empty state and add Daily Wish
-  - [ ] 22.1 Add `#userWishDisplay` div below `#greeting-message` in `index.html`
-  - [ ] 22.2 Add `KEYS.USER_WISH` storage key constant in `app.js`
-  - [ ] 22.3 Update `tick()` to render name placeholder text + `--placeholder` CSS class when no name is stored; remove class when name exists
-  - [ ] 22.4 Add `_wish` cache and wish init/render logic to `greetingWidget.init()`
-  - [ ] 22.5 Extract `_enterInlineEdit` into a generic helper that works for both name and wish spans
-  - [ ] 22.6 Add CSS for `--placeholder` opacity state on both name and wish elements; style wish display (sentence case, smaller, centered)
+- [x] 22. Fix name empty state and add Daily Wish
+  - [x] 22.1 Add `#userWishDisplay` div below `#greeting-message` in `index.html`
+  - [x] 22.2 Add `KEYS.USER_WISH` storage key constant in `app.js`
+  - [x] 22.3 Update `tick()` to render name placeholder text + `--placeholder` CSS class when no name is stored; remove class when name exists
+  - [x] 22.4 Add `_wish` cache and wish init/render logic to `greetingWidget.init()`
+  - [x] 22.5 Extract `_enterInlineEdit` into a generic helper that works for both name and wish spans
+  - [x] 22.6 Add CSS for `--placeholder` opacity state on both name and wish elements; style wish display (sentence case, smaller, centered)
