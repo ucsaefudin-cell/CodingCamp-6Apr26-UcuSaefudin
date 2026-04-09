@@ -76,6 +76,7 @@ const storage = {
 /* Storage key constants — single source of truth */
 const KEYS = {
   USER_NAME: 'tdl_user_name',
+  USER_WISH: 'tdl_user_wish',
   TASKS:     'tdl_tasks',
   LINKS:     'tdl_links',
   THEME:     'tdl_theme',
@@ -155,16 +156,28 @@ const greetingWidget = {
   /** Cached user name read from storage on init. */
   _name: '',
 
+  /** Cached daily wish read from storage on init. */
+  _wish: '',
+
+  /** Placeholder text shown when no name is stored. */
+  _NAME_PLACEHOLDER: 'Click to add your name here',
+
+  /** Placeholder text shown when no wish is stored. */
+  _WISH_PLACEHOLDER: 'Click to add your own wish',
+
   /**
    * Initialise the greeting widget.
-   * Reads the stored user name, starts the 1-second clock interval,
-   * and wires the inline contenteditable name span for click-to-edit.
-   * (Req 1.1, 1.7, 1.8, task 19.4–19.6)
+   * Reads stored name and wish, starts the 1-second clock interval,
+   * and wires both inline-editable elements. (task 22.4)
    */
   init() {
-    // Read stored name so tick() can render it immediately
-    const stored = storage.get(KEYS.USER_NAME);
-    this._name = (typeof stored === 'string' && stored.trim()) ? stored.trim() : '';
+    // Read stored name
+    const storedName = storage.get(KEYS.USER_NAME);
+    this._name = (typeof storedName === 'string' && storedName.trim()) ? storedName.trim() : '';
+
+    // Read stored wish
+    const storedWish = storage.get(KEYS.USER_WISH);
+    this._wish = (typeof storedWish === 'string' && storedWish.trim()) ? storedWish.trim() : '';
 
     // Immediate tick so the clock and greeting are populated at once
     this.tick();
@@ -172,18 +185,67 @@ const greetingWidget = {
     // Start the 1-second interval — lives for the page lifetime (Req 1.1)
     setInterval(() => this.tick(), 1000);
 
-    // Wire the inline name span for click-to-edit (task 19.5)
+    // Wire name span for click-to-edit
     const nameSpan = document.getElementById('userNameDisplay');
     if (nameSpan) {
-      nameSpan.addEventListener('click', () => this._enterInlineEdit(nameSpan));
+      nameSpan.addEventListener('click', () => {
+        this._enterInlineEdit({
+          el:          nameSpan,
+          getValue:    () => this._name,
+          onSave:      (val) => {
+            this._name = val;
+            if (val) storage.set(KEYS.USER_NAME, val);
+            else     storage.remove(KEYS.USER_NAME);
+            this.tick(); // re-render base text with/without comma
+          },
+          editingClass:     'greeting-name-inline--editing',
+          placeholderText:  this._NAME_PLACEHOLDER,
+        });
+      });
+    }
+
+    // Wire wish div for click-to-edit
+    const wishEl = document.getElementById('userWishDisplay');
+    if (wishEl) {
+      wishEl.addEventListener('click', () => {
+        this._enterInlineEdit({
+          el:          wishEl,
+          getValue:    () => this._wish,
+          onSave:      (val) => {
+            this._wish = val;
+            if (val) storage.set(KEYS.USER_WISH, val);
+            else     storage.remove(KEYS.USER_WISH);
+            this._renderWish(); // re-render wish display
+          },
+          editingClass:     'greeting-wish--editing',
+          placeholderText:  this._WISH_PLACEHOLDER,
+        });
+      });
+    }
+
+    // Render the wish once on load (clock tick handles the rest)
+    this._renderWish();
+  },
+
+  /**
+   * Render the wish element with real text or placeholder. (task 22.4)
+   */
+  _renderWish() {
+    const wishEl = document.getElementById('userWishDisplay');
+    if (!wishEl || wishEl.contentEditable === 'true') return;
+    if (this._wish) {
+      wishEl.textContent = this._wish;
+      wishEl.classList.remove('greeting-wish--placeholder');
+    } else {
+      wishEl.textContent = this._WISH_PLACEHOLDER;
+      wishEl.classList.add('greeting-wish--placeholder');
     }
   },
 
   /**
    * Called every second by the clock interval.
-   * Updates the time, date, and greeting DOM elements.
-   * Splits the greeting into a base part and the name span so the
-   * name remains independently editable. (Req 1.1, 1.2, 1.3–1.8)
+   * Updates time, date, and greeting. Renders name placeholder when
+   * no name is stored. (task 22.3)
    */
   tick() {
     const now = new Date();
@@ -200,91 +262,90 @@ const greetingWidget = {
     if (dateEl) dateEl.textContent = this.formatDate(now);
 
     // --- Greeting message (Req 1.3–1.8) ---
-    // The base span holds "GOOD MORNING" or "GOOD MORNING, " (with comma+space when a name exists).
-    // The name span holds only the name so it stays independently editable.
-    const base = this.getGreeting(now.getHours());
-    const baseEl = document.getElementById('greeting-base');
+    const base    = this.getGreeting(now.getHours());
+    const baseEl  = document.getElementById('greeting-base');
     const nameSpan = document.getElementById('userNameDisplay');
 
-    // Only update the base text — never overwrite the name span while it is being edited
     if (baseEl) {
-      baseEl.textContent = this._name ? `${base}, ` : base;
+      // Show comma+space only when a real name exists
+      baseEl.textContent = this._name ? `${base}, ` : `${base}, `;
     }
-    // Only set the name span text when it is NOT in edit mode
+
+    // Only update the name span when it is NOT being edited
     if (nameSpan && nameSpan.contentEditable !== 'true') {
-      nameSpan.textContent = this._name;
+      if (this._name) {
+        nameSpan.textContent = this._name;
+        nameSpan.classList.remove('greeting-name-inline--placeholder');
+      } else {
+        nameSpan.textContent = this._NAME_PLACEHOLDER;
+        nameSpan.classList.add('greeting-name-inline--placeholder');
+      }
     }
   },
 
   /**
-   * Enter inline edit mode on the name span.
-   * Sets contenteditable="true", selects all text, and adds the
-   * --editing CSS class. Wires blur and Enter to commit the edit.
-   * (task 19.5, 19.6)
+   * Generic inline-edit helper used by both the name span and the
+   * wish div. Accepts a config object so the same logic handles
+   * both elements without duplication. (task 22.5)
    *
-   * @param {HTMLElement} span - The #userNameDisplay span element.
+   * @param {object} cfg
+   * @param {HTMLElement} cfg.el             - The element to make editable.
+   * @param {function}    cfg.getValue       - Returns the current real value.
+   * @param {function}    cfg.onSave         - Called with trimmed value on commit.
+   * @param {string}      cfg.editingClass   - CSS class to add during editing.
+   * @param {string}      cfg.placeholderText - Placeholder to clear on edit start.
    */
-  _enterInlineEdit(span) {
+  _enterInlineEdit({ el, getValue, onSave, editingClass, placeholderText }) {
     // Guard: don't re-enter if already editing
-    if (span.contentEditable === 'true') return;
+    if (el.contentEditable === 'true') return;
 
-    // If no name yet, seed the span with a placeholder so the user
-    // has something to select and overwrite
-    if (!span.textContent.trim()) {
-      span.textContent = this._name || 'Your name';
-    }
+    // Seed with real value (or empty) so the user types over the placeholder
+    el.textContent = getValue() || '';
 
-    span.contentEditable = 'true';
-    span.classList.add('greeting-name-inline--editing');
-    span.focus();
+    el.contentEditable = 'true';
+    el.classList.add(editingClass);
+    el.focus();
 
-    // Select all text so the user can type immediately without backspacing
+    // Select all text so the user can type immediately
     const range = document.createRange();
-    range.selectNodeContents(span);
+    range.selectNodeContents(el);
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
 
-    // Commit on Enter (prevent newline), cancel on Escape (task 19.6)
+    const exitEdit = () => {
+      el.contentEditable = 'false';
+      el.classList.remove(editingClass);
+      el.removeEventListener('keydown', onKeydown);
+      el.removeEventListener('blur', onBlur);
+    };
+
+    const commit = () => {
+      const trimmed = el.textContent.trim();
+      // Treat the placeholder text itself as "no value"
+      const value = (trimmed && trimmed !== placeholderText) ? trimmed : '';
+      exitEdit();
+      onSave(value);
+    };
+
     const onKeydown = (e) => {
       if (e.key === 'Enter') {
         e.preventDefault(); // block <br> insertion
-        span.blur();        // triggers the blur handler below
+        el.blur();          // triggers onBlur → commit
       }
       if (e.key === 'Escape') {
-        // Restore original name and exit without saving
-        span.textContent = this._name;
+        el.textContent = getValue(); // restore without saving
         exitEdit();
+        // Re-render to show placeholder if needed
+        if (el.id === 'userNameDisplay') this.tick();
+        else this._renderWish();
       }
     };
 
-    // Commit on blur — fires when user clicks away or presses Enter (task 19.6)
-    const onBlur = () => {
-      const trimmed = span.textContent.trim();
-      if (trimmed && trimmed !== 'Your name') {
-        // Persist and cache the new name
-        storage.set(KEYS.USER_NAME, trimmed);
-        this._name = trimmed;
-      } else {
-        // Empty or placeholder — clear stored name
-        storage.remove(KEYS.USER_NAME);
-        this._name = '';
-        span.textContent = '';
-      }
-      exitEdit();
-      // Re-render base text immediately with updated name
-      this.tick();
-    };
+    const onBlur = () => commit();
 
-    const exitEdit = () => {
-      span.contentEditable = 'false';
-      span.classList.remove('greeting-name-inline--editing');
-      span.removeEventListener('keydown', onKeydown);
-      span.removeEventListener('blur', onBlur);
-    };
-
-    span.addEventListener('keydown', onKeydown);
-    span.addEventListener('blur', onBlur);
+    el.addEventListener('keydown', onKeydown);
+    el.addEventListener('blur', onBlur);
   },
 
   /**

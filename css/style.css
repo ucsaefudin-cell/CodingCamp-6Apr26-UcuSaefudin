@@ -382,6 +382,51 @@ body {
   caret-color: currentColor;
 }
 
+/* Placeholder state: shown when no real value is stored (task 22.3) */
+.greeting-name-inline--placeholder {
+  opacity: 0.5;
+  font-weight: 600;   /* slightly lighter than the 800 bold of a real name */
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   DAILY WISH
+   Sentence-case editable line below the greeting. (task 22.6)
+   Smaller than the greeting, centered, with the same
+   click-to-edit affordance as the name span.
+   ============================================================ */
+.greeting-wish {
+  font-size: var(--font-size-md);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-transform: none;   /* sentence case — override the parent uppercase */
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  border-bottom: 1px dashed transparent;
+  transition: border-color 0.2s, opacity 0.2s;
+  /* min-height prevents layout jump between placeholder and real text */
+  min-height: 1.5em;
+  line-height: 1.5;
+}
+
+.greeting-wish:hover {
+  border-bottom-color: currentColor;
+  opacity: 0.75;
+}
+
+/* Placeholder state for the wish (task 22.6) */
+.greeting-wish--placeholder {
+  opacity: 0.5;
+}
+
+/* Active edit state for the wish */
+.greeting-wish--editing {
+  border-bottom-color: currentColor;
+  opacity: 0.85;
+  outline: none;
+  caret-color: currentColor;
+}
+
 /* ============================================================
    TIMER WIDGET
    Countdown display and Start / Stop / Reset controls.

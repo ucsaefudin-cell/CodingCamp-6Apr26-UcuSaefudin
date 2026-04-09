@@ -137,3 +137,15 @@
   - [x] 21.2 Style `.link-item` as a solid-accent pill (background, white text, rounded, padding, no border)
   - [x] 21.3 Style `.link-item__btn` as plain white text inside the pill (no underline, no background)
   - [x] 21.4 Replace the 🗑️ delete button with a compact `×` button styled inline inside the pill in `renderLink()`
+
+---
+
+## Group 6 — Name Placeholder & Daily Wish Feature
+
+- [ ] 22. Fix name empty state and add Daily Wish
+  - [ ] 22.1 Add `#userWishDisplay` div below `#greeting-message` in `index.html`
+  - [ ] 22.2 Add `KEYS.USER_WISH` storage key constant in `app.js`
+  - [ ] 22.3 Update `tick()` to render name placeholder text + `--placeholder` CSS class when no name is stored; remove class when name exists
+  - [ ] 22.4 Add `_wish` cache and wish init/render logic to `greetingWidget.init()`
+  - [ ] 22.5 Extract `_enterInlineEdit` into a generic helper that works for both name and wish spans
+  - [ ] 22.6 Add CSS for `--placeholder` opacity state on both name and wish elements; style wish display (sentence case, smaller, centered)
