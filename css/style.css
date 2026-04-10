@@ -1,10 +1,10 @@
 /* ============================================================
-   CSS CUSTOM PROPERTIES — LIGHT THEME (default)
-   Design system tokens for the modern SaaS aesthetic.
-   Accent: Indigo (#4f46e5 / #818cf8 dark).
+   PROPERTI KUSTOM CSS — TEMA TERANG (default)
+   Sistem desain token untuk estetika SaaS modern.
+   Aksen: Indigo (#4f46e5 / #818cf8 gelap).
    ============================================================ */
 :root {
-  /* ── Palette ── */
+  /* ── Palet ── */
   --color-bg:            #f8fafc;
   --color-surface:       #ffffff;
   --color-border:        rgba(15, 23, 42, 0.08);
@@ -17,7 +17,7 @@
   --color-success:       #16a34a;
   --color-completed:     #94a3b8;
 
-  /* ── Shorthand aliases (keep backward-compat with JS/existing rules) ── */
+  /* ── Alias shorthand (pertahankan kompatibilitas mundur dengan JS/aturan yang ada) ── */
   --bg:           var(--color-bg);
   --surface:      var(--color-surface);
   --text:         var(--color-text);
@@ -27,21 +27,21 @@
   --accent-hover: var(--color-primary-hover);
   --danger:       var(--color-error);
 
-  /* ── Pill (soft-pill) tokens ── */
+  /* ── Token pil lunak ── */
   --pill-bg:          rgba(79, 70, 229, 0.1);
   --pill-text:        #3730a3;
   --pill-bg-hover:    rgba(79, 70, 229, 0.18);
   --pill-border:      rgba(79, 70, 229, 0.25);
   --pill-delete-border: rgba(55, 48, 163, 0.25);
 
-  /* ── Spacing ── */
+  /* ── Spasi ── */
   --space-xs:  0.25rem;
   --space-sm:  0.5rem;
   --space-md:  1rem;
   --space-lg:  1.5rem;
   --space-xl:  2rem;
 
-  /* ── Typography ── */
+  /* ── Tipografi ── */
   --font-family:   'Inter', system-ui, -apple-system, sans-serif;
   --font-size-sm:  0.875rem;
   --font-size-md:  1rem;
@@ -49,12 +49,12 @@
   --font-size-xl:  2rem;
   --font-size-2xl: 3rem;
 
-  /* ── Borders ── */
+  /* ── Perbatasan ── */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
 
-  /* ── Shadows (multi-layer, light mode) ── */
+  /* ── Bayangan (multi-layer, mode terang) ── */
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04),
                0 1px 6px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 1px 3px rgba(15, 23, 42, 0.04),
@@ -62,16 +62,16 @@
                0 12px 32px rgba(15, 23, 42, 0.06);
   --shadow:    var(--shadow-md);
 
-  /* ── Transitions ── */
+  /* ── Transisi ── */
   --transition-theme: background-color 0.3s ease, color 0.3s ease,
                       border-color 0.3s ease, box-shadow 0.3s ease;
   --transition-fast:  0.18s ease;
 }
 
 /* ============================================================
-   DARK THEME OVERRIDES
-   Applied via data-theme="dark" on <html>.
-   Cards use a subtle 1px border instead of heavy shadows.
+   PENGGANTIAN TEMA GELAP
+   Diterapkan melalui data-theme="dark" pada <html>.
+   Kartu menggunakan perbatasan halus 1px alih-alih bayangan berat.
    ============================================================ */
 [data-theme="dark"] {
   --color-bg:            #0f172a;
@@ -95,21 +95,21 @@
   --accent-hover: var(--color-primary-hover);
   --danger:       var(--color-error);
 
-  /* Soft-pill in dark mode */
+  /* Pil lunak dalam mode gelap */
   --pill-bg:          rgba(129, 140, 248, 0.15);
   --pill-text:        #c7d2fe;
   --pill-bg-hover:    rgba(129, 140, 248, 0.25);
   --pill-border:      rgba(129, 140, 248, 0.3);
   --pill-delete-border: rgba(165, 180, 252, 0.25);
 
-  /* Dark mode: minimal shadow, rely on border instead */
+  /* Mode gelap: bayangan minimal, andalkan perbatasan sebagai gantinya */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow:    var(--shadow-md);
 }
 
 /* ============================================================
-   RESET / BASE
+   ATUR ULANG / DASAR
    ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -140,7 +140,7 @@ html:not([data-theme="dark"]) body {
   background-color: #f8fafc;
 }
 
-/* Screen-reader only utility */
+/* Hanya pembaca layar */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -154,7 +154,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   DASHBOARD GRID LAYOUT
+   TATA LETAK GRID DASBOR
    ============================================================ */
 .dashboard-grid {
   display: grid;
@@ -174,7 +174,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   COLUMN WRAPPERS
+   PEMBUNGKUS KOLOM
    ============================================================ */
 .col-left,
 .col-right {
@@ -188,9 +188,9 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   WIDGET CARD
-   Light: multi-layer shadow + transparent border.
-   Dark: flat surface + 1px rgba border, no heavy shadow.
+   KARTU WIDGET
+   Terang: bayangan multi-layer + perbatasan transparan.
+   Gelap: permukaan datar + perbatasan rgba 1px, tanpa bayangan berat.
    ============================================================ */
 .widget {
   background-color: var(--color-surface);
@@ -210,7 +210,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   SHARED FORM CONTROLS
+   KONTROL FORMULIR BERSAMA
    ============================================================ */
 .input {
   flex: 1;
@@ -309,7 +309,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   VALIDATION MESSAGES
+   PESAN VALIDASI
    ============================================================ */
 .validation-message {
   display: block;
@@ -320,7 +320,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   EMPTY-STATE MESSAGES
+   PESAN KEADAAN KOSONG
    ============================================================ */
 .empty-state {
   font-size: var(--font-size-sm);
@@ -331,8 +331,8 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   GREETING WIDGET
-   Prominent clock + greeting; softer wish line below.
+   WIDGET SALAM
+   Jam tangan menonjol + salam; baris keinginan lebih lembut di bawah.
    ============================================================ */
 .widget--greeting {
   grid-column: 1 / -1;
@@ -379,7 +379,7 @@ html:not([data-theme="dark"]) body {
   line-height: 1.1;
 }
 
-/* ── Inline name editing ── */
+/* ── Penyuntingan nama inline ── */
 .greeting-name-inline {
   cursor: pointer;
   border-bottom: 2px dashed transparent;
@@ -407,7 +407,7 @@ html:not([data-theme="dark"]) body {
   letter-spacing: 0.04em;
 }
 
-/* ── Daily wish — softer, smaller than greeting ── */
+/* ── Keinginan harian — lebih lembut, lebih kecil dari salam ── */
 .greeting-wish {
   font-size: var(--font-size-sm);
   font-weight: 400;
@@ -438,8 +438,8 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   POMODORO INFO ICON & TOOLTIP
-   Pure-CSS tooltip — no JS needed.
+   IKON INFO POMODORO & TOOLTIP
+   Tooltip CSS murni — tidak perlu JS.
    ============================================================ */
 .info-icon {
   position: relative;
@@ -495,7 +495,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   DRAG-AND-DROP — shared visual feedback
+   SERET DAN LEPAS — umpan balik visual bersama
    ============================================================ */
 .dragging {
   opacity: 0.35;
@@ -514,7 +514,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   TIMER WIDGET
+   WIDGET TIMER
    ============================================================ */
 .widget--timer {
   display: flex;
@@ -563,7 +563,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   TODO WIDGET
+   WIDGET TODO
    ============================================================ */
 .widget--todo {
   display: flex;
@@ -623,7 +623,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   LINKS WIDGET
+   WIDGET TAUTAN
    ============================================================ */
 .widget--links {
   display: flex;
@@ -645,7 +645,7 @@ html:not([data-theme="dark"]) body {
   min-width: 0;
 }
 
-/* ── Links list — horizontal wrapping pills ── */
+/* ── Daftar tautan — pil pembungkus horizontal ── */
 .links-list {
   list-style: none;
   display: flex;
@@ -654,7 +654,7 @@ html:not([data-theme="dark"]) body {
   margin-top: var(--space-sm);
 }
 
-/* Soft-pill design: tinted background, darker text, readable on both themes */
+/* Desain pil lunak: latar belakang berwarna, teks lebih gelap, dapat dibaca di kedua tema */
 .link-item {
   display: inline-flex;
   align-items: center;
@@ -680,7 +680,7 @@ html:not([data-theme="dark"]) body {
   box-shadow: 0 4px 12px rgba(129, 140, 248, 0.25);
 }
 
-/* Link label button */
+/* Tombol label tautan */
 .link-item__btn {
   background: none;
   border: none;
@@ -698,7 +698,7 @@ html:not([data-theme="dark"]) body {
   transition: color var(--transition-fast);
 }
 
-/* Favicon inside each pill */
+/* Favicon di dalam setiap pil */
 .link-item__favicon {
   width: 16px;
   height: 16px;
@@ -714,7 +714,7 @@ html:not([data-theme="dark"]) body {
   margin: 0;
 }
 
-/* × delete button */
+/* Tombol × hapus */
 .link-item__delete {
   background: none;
   border: none;
@@ -748,7 +748,7 @@ html:not([data-theme="dark"]) body {
 }
 
 /* ============================================================
-   QUOTES WIDGET
+   WIDGET KUTIPAN
    ============================================================ */
 .widget--quotes {
   grid-column: 1 / -1;

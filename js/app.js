@@ -1,24 +1,24 @@
 /**
- * app.js — To-Do Life Dashboard
+ * app.js — Dasbor To-Do Life
  *
- * Single JavaScript module for the entire dashboard.
- * Organised into:
- *   1. Storage helpers  — thin wrappers around localStorage
- *   2. Theme Manager    — light/dark theme switching
- *   3. Greeting Widget  — live clock, date, and personalised greeting
- *   4. Timer Widget     — 25-minute Pomodoro countdown
- *   5. Todo Widget      — task list with add / edit / complete / delete
- *   6. Links Widget     — quick-links panel with add / delete
- *   7. init()           — entry point, wires everything together on DOMContentLoaded
+ * Modul JavaScript tunggal untuk seluruh dasbor.
+ * Diorganisir menjadi:
+ *   1. Pembantu penyimpanan  — pembungkus tipis di sekitar localStorage
+ *   2. Manajer Tema    — pengalihan tema terang/gelap
+ *   3. Widget Salam  — jam tangan langsung, tanggal, dan salam yang dipersonalisasi
+ *   4. Widget Timer     — hitung mundur Pomodoro 25 menit
+ *   5. Widget Todo      — daftar tugas dengan tambah / edit / selesai / hapus
+ *   6. Widget Tautan     — panel tautan cepat dengan tambah / hapus
+ *   7. init()           — titik masuk, menghubungkan semuanya pada DOMContentLoaded
  */
 
 'use strict';
 
 /* ============================================================
-   STORAGE HELPERS
-   All localStorage reads and writes go through these helpers.
-   They handle JSON serialisation and catch quota / security
-   errors so the rest of the app never has to deal with them.
+   PEMBANTU PENYIMPANAN
+   Semua pembacaan dan penulisan localStorage melalui pembantu ini.
+   Mereka menangani serialisasi JSON dan menangkap kuota / keamanan
+   kesalahan sehingga sisa aplikasi tidak perlu menanganinya.
    ============================================================ */
 
 /**
@@ -26,11 +26,11 @@
  */
 const storage = {
   /**
-   * Read a value from localStorage and parse it as JSON.
-   * Returns null if the key is absent or parsing fails.
+   * Baca nilai dari localStorage dan parse sebagai JSON.
+   * Mengembalikan null jika kunci tidak ada atau parsing gagal.
    *
-   * @param {string} key - The localStorage key to read.
-   * @returns {*} The parsed value, or null on any error.
+   * @param {string} key - Kunci localStorage yang akan dibaca.
+   * @returns {*} Nilai yang diparse, atau null pada kesalahan apa pun.
    */
   get(key) {
     try {
@@ -44,11 +44,11 @@ const storage = {
   },
 
   /**
-   * Serialise a value as JSON and write it to localStorage.
-   * Silently logs a warning if the write fails (e.g. quota exceeded).
+   * Serialisasi nilai sebagai JSON dan tulis ke localStorage.
+   * Secara diam-diam mencatat peringatan jika penulisan gagal (misalnya kuota terlampaui).
    *
-   * @param {string} key   - The localStorage key to write.
-   * @param {*}      value - Any JSON-serialisable value.
+   * @param {string} key   - Kunci localStorage yang akan ditulis.
+   * @param {*}      value - Nilai apa pun yang dapat diserialisasi JSON.
    */
   set(key, value) {
     try {
@@ -59,10 +59,10 @@ const storage = {
   },
 
   /**
-   * Remove a key from localStorage.
-   * Silently ignores errors.
+   * Hapus kunci dari localStorage.
+   * Secara diam-diam mengabaikan kesalahan.
    *
-   * @param {string} key - The localStorage key to remove.
+   * @param {string} key - Kunci localStorage yang akan dihapus.
    */
   remove(key) {
     try {
@@ -73,7 +73,7 @@ const storage = {
   },
 };
 
-/* Storage key constants — single source of truth */
+/* Konstanta kunci penyimpanan — sumber kebenaran tunggal */
 const KEYS = {
   USER_NAME: 'tdl_user_name',
   USER_WISH: 'tdl_user_wish',
@@ -83,9 +83,9 @@ const KEYS = {
 };
 
 /* ============================================================
-   THEME MANAGER
-   Reads / writes the theme preference and applies it to <html>.
-   The actual flash-prevention script lives inline in <head>.
+   MANAJER TEMA
+   Membaca / menulis preferensi tema dan menerapkannya ke <html>.
+   Skrip flash-prevention aktual tinggal inline di <head>.
    ============================================================ */
 
 /**
@@ -93,17 +93,17 @@ const KEYS = {
  */
 const themeManager = {
   /**
-   * Initialise the theme manager.
-   * Reads the stored theme (defaulting to 'light') and applies it,
-   * then wires the toggle button to themeManager.toggle().
+   * Inisialisasi manajer tema.
+   * Membaca tema yang disimpan (default ke 'light') dan menerapkannya,
+   * kemudian menghubungkan tombol toggle ke themeManager.toggle().
    */
   init() {
     const stored = storage.get(KEYS.THEME);
-    // Default to 'light' if no valid theme is stored (Req 10.5)
+    // Default ke 'light' jika tidak ada tema valid yang disimpan (Req 10.5)
     const theme = stored === 'dark' ? 'dark' : 'light';
     this.apply(theme);
 
-    // Wire the toggle button (Req 10.1, 10.2)
+    // Hubungkan tombol toggle (Req 10.1, 10.2)
     const btn = document.getElementById('theme-toggle');
     if (btn) {
       btn.addEventListener('click', () => this.toggle());
@@ -111,8 +111,8 @@ const themeManager = {
   },
 
   /**
-   * Toggle between 'light' and 'dark' themes.
-   * Persists the new theme to storage (Req 10.2, 10.3).
+   * Beralih antara tema 'light' dan 'dark'.
+   * Mempertahankan tema baru ke penyimpanan (Req 10.2, 10.3).
    */
   toggle() {
     const current = document.documentElement.getAttribute('data-theme');
@@ -122,10 +122,10 @@ const themeManager = {
   },
 
   /**
-   * Apply a theme by setting data-theme on <html> and updating
-   * the toggle button label/aria-label.
+   * Terapkan tema dengan menetapkan data-theme pada <html> dan memperbarui
+   * label tombol toggle/aria-label.
    *
-   * @param {'light'|'dark'} theme - The theme to apply.
+   * @param {'light'|'dark'} theme - Tema yang akan diterapkan.
    */
   apply(theme) {
     if (theme === 'dark') {
@@ -134,7 +134,7 @@ const themeManager = {
       document.documentElement.removeAttribute('data-theme');
     }
 
-    // Update toggle button icon and accessible label
+    // Perbarui ikon tombol toggle dan label yang dapat diakses
     const btn = document.getElementById('theme-toggle');
     if (btn) {
       btn.textContent = theme === 'dark' ? '☀️' : '🌙';
@@ -144,48 +144,48 @@ const themeManager = {
 };
 
 /* ============================================================
-   GREETING WIDGET
-   Shows the live clock, current date, and a time-based greeting.
-   Optionally appends the stored user name to the greeting.
+   WIDGET SALAM
+   Menampilkan jam tangan langsung, tanggal saat ini, dan salam berbasis waktu.
+   Secara opsional menambahkan nama pengguna yang disimpan ke salam.
    ============================================================ */
 
 /**
  * @namespace greetingWidget
  */
 const greetingWidget = {
-  /** Cached user name read from storage on init. */
+  /** Nama pengguna yang di-cache dibaca dari penyimpanan pada init. */
   _name: '',
 
-  /** Cached daily wish read from storage on init. */
+  /** Keinginan harian yang di-cache dibaca dari penyimpanan pada init. */
   _wish: '',
 
-  /** Placeholder text shown when no name is stored. */
+  /** Teks placeholder ditampilkan ketika tidak ada nama yang disimpan. */
   _NAME_PLACEHOLDER: 'Click to add your name here',
 
-  /** Placeholder text shown when no wish is stored. */
+  /** Teks placeholder ditampilkan ketika tidak ada keinginan yang disimpan. */
   _WISH_PLACEHOLDER: 'Click to add your own wish',
 
   /**
-   * Initialise the greeting widget.
-   * Reads stored name and wish, starts the 1-second clock interval,
-   * and wires both inline-editable elements. (task 22.4)
+   * Inisialisasi widget salam.
+   * Membaca nama dan keinginan yang disimpan, memulai interval jam 1 detik,
+   * dan menghubungkan kedua elemen yang dapat diedit secara inline. (task 22.4)
    */
   init() {
-    // Read stored name
+    // Baca nama yang disimpan
     const storedName = storage.get(KEYS.USER_NAME);
     this._name = (typeof storedName === 'string' && storedName.trim()) ? storedName.trim() : '';
 
-    // Read stored wish
+    // Baca keinginan yang disimpan
     const storedWish = storage.get(KEYS.USER_WISH);
     this._wish = (typeof storedWish === 'string' && storedWish.trim()) ? storedWish.trim() : '';
 
-    // Immediate tick so the clock and greeting are populated at once
+    // Tick segera sehingga jam dan salam diisi sekaligus
     this.tick();
 
-    // Start the 1-second interval — lives for the page lifetime (Req 1.1)
+    // Mulai interval 1 detik — hidup selama seumur hidup halaman (Req 1.1)
     setInterval(() => this.tick(), 1000);
 
-    // Wire name span for click-to-edit
+    // Hubungkan rentang nama untuk klik-ke-edit
     const nameSpan = document.getElementById('userNameDisplay');
     if (nameSpan) {
       nameSpan.addEventListener('click', () => {
@@ -196,7 +196,7 @@ const greetingWidget = {
             this._name = val;
             if (val) storage.set(KEYS.USER_NAME, val);
             else     storage.remove(KEYS.USER_NAME);
-            this.tick(); // re-render base text with/without comma
+            this.tick(); // render ulang teks dasar dengan/tanpa koma
           },
           editingClass:     'greeting-name-inline--editing',
           placeholderText:  this._NAME_PLACEHOLDER,
@@ -204,7 +204,7 @@ const greetingWidget = {
       });
     }
 
-    // Wire wish div for click-to-edit
+    // Hubungkan div keinginan untuk klik-ke-edit
     const wishEl = document.getElementById('userWishDisplay');
     if (wishEl) {
       wishEl.addEventListener('click', () => {
@@ -215,7 +215,7 @@ const greetingWidget = {
             this._wish = val;
             if (val) storage.set(KEYS.USER_WISH, val);
             else     storage.remove(KEYS.USER_WISH);
-            this._renderWish(); // re-render wish display
+            this._renderWish(); // render ulang tampilan keinginan
           },
           editingClass:     'greeting-wish--editing',
           placeholderText:  this._WISH_PLACEHOLDER,
@@ -223,12 +223,12 @@ const greetingWidget = {
       });
     }
 
-    // Render the wish once on load (clock tick handles the rest)
+    // Render keinginan sekali pada beban (tick jam menangani sisanya)
     this._renderWish();
   },
 
   /**
-   * Render the wish element with real text or placeholder. (task 22.4)
+   * Render elemen keinginan dengan teks nyata atau placeholder. (task 22.4)
    */
   _renderWish() {
     const wishEl = document.getElementById('userWishDisplay');
@@ -243,35 +243,35 @@ const greetingWidget = {
   },
 
   /**
-   * Called every second by the clock interval.
-   * Updates time, date, and greeting. Renders name placeholder when
-   * no name is stored. (task 22.3)
+   * Dipanggil setiap detik oleh interval jam.
+   * Memperbarui waktu, tanggal, dan salam. Render placeholder nama ketika
+   * tidak ada nama yang disimpan. (task 22.3)
    */
   tick() {
     const now = new Date();
 
-    // --- Time display (Req 1.1) ---
+    // --- Tampilan waktu (Req 1.1) ---
     const hh = String(now.getHours()).padStart(2, '0');
     const mm = String(now.getMinutes()).padStart(2, '0');
     const ss = String(now.getSeconds()).padStart(2, '0');
     const timeEl = document.getElementById('greeting-time');
     if (timeEl) timeEl.textContent = `${hh}:${mm}:${ss}`;
 
-    // --- Date display (Req 1.2) ---
+    // --- Tampilan tanggal (Req 1.2) ---
     const dateEl = document.getElementById('greeting-date');
     if (dateEl) dateEl.textContent = this.formatDate(now);
 
-    // --- Greeting message (Req 1.3–1.8) ---
+    // --- Pesan salam (Req 1.3–1.8) ---
     const base    = this.getGreeting(now.getHours());
     const baseEl  = document.getElementById('greeting-base');
     const nameSpan = document.getElementById('userNameDisplay');
 
     if (baseEl) {
-      // Show comma+space only when a real name exists
+      // Tampilkan koma+spasi hanya ketika nama nyata ada
       baseEl.textContent = this._name ? `${base}, ` : `${base}, `;
     }
 
-    // Only update the name span when it is NOT being edited
+    // Hanya perbarui rentang nama ketika TIDAK sedang diedit
     if (nameSpan && nameSpan.contentEditable !== 'true') {
       if (this._name) {
         nameSpan.textContent = this._name;
@@ -284,29 +284,29 @@ const greetingWidget = {
   },
 
   /**
-   * Generic inline-edit helper used by both the name span and the
-   * wish div. Accepts a config object so the same logic handles
-   * both elements without duplication. (task 22.5)
+   * Pembantu edit inline generik yang digunakan oleh rentang nama dan
+   * div keinginan. Menerima objek konfigurasi sehingga logika yang sama menangani
+   * kedua elemen tanpa duplikasi. (task 22.5)
    *
    * @param {object} cfg
-   * @param {HTMLElement} cfg.el             - The element to make editable.
-   * @param {function}    cfg.getValue       - Returns the current real value.
-   * @param {function}    cfg.onSave         - Called with trimmed value on commit.
-   * @param {string}      cfg.editingClass   - CSS class to add during editing.
-   * @param {string}      cfg.placeholderText - Placeholder to clear on edit start.
+   * @param {HTMLElement} cfg.el             - Elemen yang akan dibuat dapat diedit.
+   * @param {function}    cfg.getValue       - Mengembalikan nilai nyata saat ini.
+   * @param {function}    cfg.onSave         - Dipanggil dengan nilai yang dipangkas pada commit.
+   * @param {string}      cfg.editingClass   - Kelas CSS untuk ditambahkan selama penyuntingan.
+   * @param {string}      cfg.placeholderText - Placeholder untuk dihapus pada awal edit.
    */
   _enterInlineEdit({ el, getValue, onSave, editingClass, placeholderText }) {
-    // Guard: don't re-enter if already editing
+    // Penjaga: jangan masuk kembali jika sudah diedit
     if (el.contentEditable === 'true') return;
 
-    // Seed with real value (or empty) so the user types over the placeholder
+    // Benih dengan nilai nyata (atau kosong) sehingga pengguna mengetik di atas placeholder
     el.textContent = getValue() || '';
 
     el.contentEditable = 'true';
     el.classList.add(editingClass);
     el.focus();
 
-    // Select all text so the user can type immediately
+    // Pilih semua teks sehingga pengguna dapat mengetik segera
     const range = document.createRange();
     range.selectNodeContents(el);
     const sel = window.getSelection();
@@ -322,7 +322,7 @@ const greetingWidget = {
 
     const commit = () => {
       const trimmed = el.textContent.trim();
-      // Treat the placeholder text itself as "no value"
+      // Perlakukan teks placeholder itu sendiri sebagai "tidak ada nilai"
       const value = (trimmed && trimmed !== placeholderText) ? trimmed : '';
       exitEdit();
       onSave(value);
@@ -330,13 +330,13 @@ const greetingWidget = {
 
     const onKeydown = (e) => {
       if (e.key === 'Enter') {
-        e.preventDefault(); // block <br> insertion
-        el.blur();          // triggers onBlur → commit
+        e.preventDefault(); // blokir penyisipan <br>
+        el.blur();          // memicu onBlur → commit
       }
       if (e.key === 'Escape') {
-        el.textContent = getValue(); // restore without saving
+        el.textContent = getValue(); // pulihkan tanpa menyimpan
         exitEdit();
-        // Re-render to show placeholder if needed
+        // Render ulang untuk menampilkan placeholder jika diperlukan
         if (el.id === 'userNameDisplay') this.tick();
         else this._renderWish();
       }
@@ -349,30 +349,30 @@ const greetingWidget = {
   },
 
   /**
-   * Map an hour (0–23) to the appropriate greeting string.
+   * Petakan jam (0–23) ke string salam yang sesuai.
    * 05–11 → "Good morning"  (Req 1.3)
    * 12–17 → "Good afternoon" (Req 1.4)
    * 18–21 → "Good evening"  (Req 1.5)
    * 22–23, 0–4 → "Good night" (Req 1.6)
    *
-   * @param {number} hour - Integer hour in [0, 23].
-   * @returns {string} One of "Good morning", "Good afternoon",
-   *                   "Good evening", or "Good night".
+   * @param {number} hour - Jam integer dalam [0, 23].
+   * @returns {string} Salah satu dari "Good morning", "Good afternoon",
+   *                   "Good evening", atau "Good night".
    */
   getGreeting(hour) {
     if (hour >= 5 && hour <= 11) return 'Good morning';
     if (hour >= 12 && hour <= 17) return 'Good afternoon';
     if (hour >= 18 && hour <= 21) return 'Good evening';
-    return 'Good night'; // covers 22–23 and 0–4
+    return 'Good night'; // mencakup 22–23 dan 0–4
   },
 
   /**
-   * Format a Date object into a human-readable date string containing
-   * the day of the week, month name, day number, and four-digit year.
-   * E.g. "Monday, January 1, 2025" (Req 1.2)
+   * Format objek Date menjadi string tanggal yang dapat dibaca manusia yang berisi
+   * hari dalam seminggu, nama bulan, nomor hari, dan tahun empat digit.
+   * Misalnya "Monday, January 1, 2025" (Req 1.2)
    *
-   * @param {Date} date - The date to format.
-   * @returns {string} E.g. "Monday, January 1, 2025".
+   * @param {Date} date - Tanggal yang akan diformat.
+   * @returns {string} Misalnya "Monday, January 1, 2025".
    */
   formatDate(date) {
     return date.toLocaleDateString('en-US', {
@@ -385,75 +385,75 @@ const greetingWidget = {
 };
 
 /* ============================================================
-   TIMER WIDGET
-   25-minute (1500-second) Pomodoro countdown.
-   State is kept in memory only — not persisted to localStorage.
+   WIDGET TIMER
+   Hitung mundur Pomodoro 25 menit (1500 detik).
+   Status disimpan hanya dalam memori — tidak bertahan ke localStorage.
    ============================================================ */
 
 /**
  * @namespace timerWidget
  */
 const timerWidget = {
-  /** Seconds remaining in the current session. */
+  /** Detik yang tersisa dalam sesi saat ini. */
   remaining: 1500,
 
-  /** The id returned by setInterval, or null when not running. */
+  /** Id yang dikembalikan oleh setInterval, atau null ketika tidak berjalan. */
   intervalId: null,
 
   /**
-   * Shared AudioContext instance.
-   * Created lazily on the first Start click so it is always
-   * created inside a user-gesture, satisfying browser autoplay policy.
+   * Instans AudioContext bersama.
+   * Dibuat dengan malas pada klik Start pertama sehingga selalu
+   * dibuat di dalam gesture pengguna, memuaskan kebijakan autoplay browser.
    * @type {AudioContext|null}
    */
   _audioCtx: null,
 
-  /** Master GainNode for the active alarm, or null when silent. */
+  /** GainNode master untuk alarm aktif, atau null ketika senyap. */
   _alarmGain: null,
 
-  /** setTimeout id for the auto-mute fallback, or null. */
+  /** Id setTimeout untuk fallback auto-mute, atau null. */
   _alarmAutoStopId: null,
 
   /**
-   * Create (or resume) the AudioContext on the first user interaction.
-   * Must be called from within a click handler to satisfy the browser's
-   * autoplay policy and guarantee the alarm will play later.
+   * Buat (atau lanjutkan) AudioContext pada interaksi pengguna pertama.
+   * Harus dipanggil dari dalam penangan klik untuk memuaskan
+   * kebijakan autoplay browser dan menjamin alarm akan diputar nanti.
    */
   _unlockAudio() {
     if (!window.AudioContext && !window.webkitAudioContext) return;
     if (!this._audioCtx) {
       this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    // Resume in case the context was suspended (e.g. tab was backgrounded)
+    // Lanjutkan jika konteks ditangguhkan (misalnya tab di latar belakang)
     if (this._audioCtx.state === 'suspended') {
       this._audioCtx.resume();
     }
   },
 
   /**
-   * Play a continuous alarm for ALARM_DURATION seconds using the Web
-   * Audio API.  The alarm is a repeating pattern of short 880 Hz beeps
-   * spaced 400 ms apart, scheduled ahead of time so the browser's audio
-   * thread never gaps.  A master GainNode is stored so _muteAlarm() can
-   * ramp it to silence instantly without audible clicks.
+   * Putar alarm berkelanjutan selama ALARM_DURATION detik menggunakan Web
+   * Audio API. Alarm adalah pola berulang dari bip pendek 880 Hz
+   * berjarak 400 ms terpisah, dijadwalkan sebelumnya sehingga thread audio browser
+   * tidak pernah ada celah. GainNode master disimpan sehingga _muteAlarm() dapat
+   * menurunkannya ke senyap secara instan tanpa klik yang terdengar.
    */
   _playAlarm() {
     const ctx = this._audioCtx;
     if (!ctx) return;
 
-    const ALARM_DURATION = 10;    // total seconds the alarm runs
-    const BEEP_FREQ      = 880;   // Hz — A5, clear and attention-grabbing
-    const BEEP_DURATION  = 0.22;  // seconds each beep sounds
-    const BEEP_SPACING   = 0.4;   // seconds between beep starts
+    const ALARM_DURATION = 10;    // total detik alarm berjalan
+    const BEEP_FREQ      = 880;   // Hz — A5, jelas dan menarik perhatian
+    const BEEP_DURATION  = 0.22;  // detik setiap bip terdengar
+    const BEEP_SPACING   = 0.4;   // detik antara awal bip
     const VOLUME         = 0.35;
 
-    // Master gain — ramping this to 0 is how _muteAlarm() silences everything
+    // Gain master — menurunkan ini ke 0 adalah cara _muteAlarm() membisukan semuanya
     const masterGain = ctx.createGain();
     masterGain.gain.setValueAtTime(VOLUME, ctx.currentTime);
     masterGain.connect(ctx.destination);
     this._alarmGain = masterGain;
 
-    // Schedule all beeps for the full alarm window
+    // Jadwalkan semua bip untuk jendela alarm penuh
     const beepCount = Math.floor(ALARM_DURATION / BEEP_SPACING);
     for (let i = 0; i < beepCount; i++) {
       const startAt = ctx.currentTime + i * BEEP_SPACING;
@@ -465,7 +465,7 @@ const timerWidget = {
       osc.type            = 'sine';
       osc.frequency.value = BEEP_FREQ;
 
-      // Per-beep envelope: attack → exponential decay to near-silence
+      // Amplop per-bip: serangan → peluruhan eksponensial ke hampir-senyap
       gain.gain.setValueAtTime(1, startAt);
       gain.gain.exponentialRampToValueAtTime(0.0001, startAt + BEEP_DURATION);
 
@@ -476,16 +476,16 @@ const timerWidget = {
       osc.stop(startAt + BEEP_DURATION + 0.05);
     }
 
-    // Auto-mute after ALARM_DURATION seconds if user hasn't clicked
+    // Auto-mute setelah ALARM_DURATION detik jika pengguna belum mengklik
     this._alarmAutoStopId = setTimeout(() => this._muteAlarm(), ALARM_DURATION * 1000);
   },
 
   /**
-   * Immediately silence the alarm and restore normal UI state.
-   * Safe to call multiple times (idempotent).
+   * Bisukan alarm segera dan pulihkan keadaan UI normal.
+   * Aman untuk dipanggil berkali-kali (idempoten).
    */
   _muteAlarm() {
-    // Ramp master gain to silence over 80 ms to avoid a click
+    // Turunkan gain master ke senyap selama 80 ms untuk menghindari klik
     if (this._alarmGain && this._audioCtx) {
       const ctx = this._audioCtx;
       this._alarmGain.gain.cancelScheduledValues(ctx.currentTime);
@@ -494,20 +494,20 @@ const timerWidget = {
       this._alarmGain = null;
     }
 
-    // Cancel the auto-stop timeout if muted early
+    // Batalkan timeout auto-stop jika dibisukan lebih awal
     if (this._alarmAutoStopId !== null) {
       clearTimeout(this._alarmAutoStopId);
       this._alarmAutoStopId = null;
     }
 
-    // Restore Stop button and hide hint
+    // Pulihkan tombol Stop dan sembunyikan petunjuk
     this._setAlarmUI(false);
   },
 
   /**
-   * Toggle the "MUTE ALARM" UI state on the Stop button.
+   * Alihkan keadaan UI "MUTE ALARM" pada tombol Stop.
    *
-   * @param {boolean} alarming - true while alarm is ringing, false otherwise.
+   * @param {boolean} alarming - true saat alarm berbunyi, false sebaliknya.
    */
   _setAlarmUI(alarming) {
     const stopBtn = document.getElementById('timer-stop');
@@ -528,8 +528,8 @@ const timerWidget = {
   },
 
   /**
-   * Initialise the timer widget.
-   * Sets remaining to 1500, renders the display, and binds buttons.
+   * Inisialisasi widget timer.
+   * Menetapkan sisa ke 1500, merender tampilan, dan mengikat tombol.
    * (Req 3.1, 3.7)
    */
   init() {
@@ -540,63 +540,63 @@ const timerWidget = {
     this.render();
     this.setButtonStates(false);
 
-    // Hide the completion indicator on init
+    // Sembunyikan indikator penyelesaian pada init
     const completeEl = document.getElementById('timer-complete');
     if (completeEl) completeEl.hidden = true;
 
-    // Bind Start button (Req 3.2, 3.4)
+    // Hubungkan tombol Start (Req 3.2, 3.4)
     const startBtn = document.getElementById('timer-start');
     if (startBtn) startBtn.addEventListener('click', () => this.start());
 
-    // Stop button doubles as MUTE ALARM when the alarm is ringing
+    // Tombol Stop berlipat ganda sebagai MUTE ALARM ketika alarm berbunyi
     const stopBtn = document.getElementById('timer-stop');
     if (stopBtn) {
       stopBtn.addEventListener('click', () => {
         if (this._alarmGain !== null) {
-          this._muteAlarm();   // alarm is active — mute it
+          this._muteAlarm();   // alarm aktif — bisukan
         } else {
-          this.stop();         // normal pause behaviour
+          this.stop();         // perilaku jeda normal
         }
       });
     }
 
-    // Bind Reset button (Req 3.5)
+    // Hubungkan tombol Reset (Req 3.5)
     const resetBtn = document.getElementById('timer-reset');
     if (resetBtn) resetBtn.addEventListener('click', () => this.reset());
   },
 
   /**
-   * Start the countdown interval.
-   * Guards against double-starting if already running.
-   * Updates button states to reflect the running state. (Req 3.2, 3.8)
+   * Mulai interval hitung mundur.
+   * Menjaga terhadap double-starting jika sudah berjalan.
+   * Memperbarui keadaan tombol untuk mencerminkan keadaan berjalan. (Req 3.2, 3.8)
    */
   start() {
-    if (this.intervalId !== null) return; // already running
-    // Unlock / resume AudioContext inside this user gesture so the
-    // alarm is guaranteed to play when the session ends.
+    if (this.intervalId !== null) return; // sudah berjalan
+    // Buka kunci / lanjutkan AudioContext di dalam gesture pengguna ini sehingga
+    // alarm dijamin akan diputar ketika sesi berakhir.
     this._unlockAudio();
     this.intervalId = setInterval(() => this.tick(), 1000);
     this.setButtonStates(true);
   },
 
   /**
-   * Stop (pause) the countdown interval.
-   * Clears the interval and updates button states. (Req 3.3, 3.9)
+   * Hentikan (jeda) interval hitung mundur.
+   * Menghapus interval dan memperbarui keadaan tombol. (Req 3.3, 3.9)
    */
   stop() {
-    if (this.intervalId === null) return; // already stopped
+    if (this.intervalId === null) return; // sudah berhenti
     clearInterval(this.intervalId);
     this.intervalId = null;
     this.setButtonStates(false);
   },
 
   /**
-   * Called every second by the countdown interval.
-   * Decrements remaining and re-renders; calls onComplete() at 0. (Req 3.2, 3.6)
+   * Dipanggil setiap detik oleh interval hitung mundur.
+   * Mengurangi sisa dan merender ulang; memanggil onComplete() pada 0. (Req 3.2, 3.6)
    */
   tick() {
     this.remaining -= 1;
-    // Clamp to 0 so it never goes negative
+    // Jepit ke 0 sehingga tidak pernah menjadi negatif
     if (this.remaining < 0) this.remaining = 0;
     this.render();
     if (this.remaining <= 0) {
@@ -605,40 +605,40 @@ const timerWidget = {
   },
 
   /**
-   * Stop any active interval and restore remaining to 1500.
-   * Re-renders the display and resets button states. (Req 3.5)
+   * Hentikan interval aktif apa pun dan pulihkan sisa ke 1500.
+   * Render ulang tampilan dan atur ulang keadaan tombol. (Req 3.5)
    */
   reset() {
-    // Kill any active alarm first (also restores Stop button)
+    // Bunuh alarm aktif terlebih dahulu (juga memulihkan tombol Stop)
     this._muteAlarm();
     this.stop();
     this.remaining = 1500;
     this.render();
     this.setButtonStates(false);
 
-    // Hide the completion indicator when resetting
+    // Sembunyikan indikator penyelesaian saat mengatur ulang
     const completeEl = document.getElementById('timer-complete');
     if (completeEl) completeEl.hidden = true;
   },
 
   /**
-   * Called when the countdown reaches 0.
-   * Stops the timer and shows the visual completion indicator. (Req 3.6)
+   * Dipanggil ketika hitung mundur mencapai 0.
+   * Menghentikan timer dan menampilkan indikator penyelesaian visual. (Req 3.6)
    */
   onComplete() {
     this.stop();
     const completeEl = document.getElementById('timer-complete');
     if (completeEl) completeEl.hidden = false;
-    // Show MUTE ALARM button + hint, then start the 10-second alarm
+    // Tampilkan tombol MUTE ALARM + petunjuk, kemudian mulai alarm 10 detik
     this._setAlarmUI(true);
     this._playAlarm();
   },
 
   /**
-   * Enable or disable the Start, Stop, and Reset buttons based on
-   * whether the timer is currently running. (Req 3.8, 3.9)
+   * Aktifkan atau nonaktifkan tombol Start, Stop, dan Reset berdasarkan
+   * apakah timer saat ini berjalan. (Req 3.8, 3.9)
    *
-   * @param {boolean} running - True if the timer is counting down.
+   * @param {boolean} running - True jika timer sedang hitung mundur.
    */
   setButtonStates(running) {
     const startBtn = document.getElementById('timer-start');
@@ -651,11 +651,11 @@ const timerWidget = {
   },
 
   /**
-   * Format a number of seconds as a zero-padded MM:SS string.
-   * E.g. formatTime(1500) → "25:00", formatTime(299) → "04:59". (Req 3.7)
+   * Format sejumlah detik sebagai string MM:SS yang diisi nol.
+   * Misalnya formatTime(1500) → "25:00", formatTime(299) → "04:59". (Req 3.7)
    *
-   * @param {number} seconds - Integer in [0, 1500].
-   * @returns {string} Zero-padded MM:SS string.
+   * @param {number} seconds - Integer dalam [0, 1500].
+   * @returns {string} String MM:SS yang diisi nol.
    */
   formatTime(seconds) {
     const m = Math.floor(seconds / 60);
@@ -664,8 +664,8 @@ const timerWidget = {
   },
 
   /**
-   * Write the current remaining time to the #timer-display element.
-   * Called after every state change that affects the display. (Req 3.7)
+   * Tulis waktu sisa saat ini ke elemen #timer-display.
+   * Dipanggil setelah setiap perubahan keadaan yang mempengaruhi tampilan. (Req 3.7)
    */
   render() {
     const displayEl = document.getElementById('timer-display');

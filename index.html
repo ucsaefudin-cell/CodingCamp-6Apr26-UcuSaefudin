@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>To-Do Life Dashboard</title>
 
-  <!-- Inline script: read stored theme and apply data-theme before first paint to prevent flash -->
+  <!-- Skrip inline: baca tema yang disimpan dan terapkan data-theme sebelum render pertama untuk mencegah kilatan -->
   <script>
     (function () {
       var theme = localStorage.getItem('tdl_theme');
@@ -21,14 +21,14 @@
 
   <main class="dashboard-grid">
 
-    <!-- ===== GREETING WIDGET ===== -->
-    <!-- Theme toggle is positioned absolutely in the top-right corner of this card -->
+    <!-- ===== WIDGET SALAM ===== -->
+    <!-- Tombol pengalih tema diposisikan secara absolut di sudut kanan atas kartu ini -->
     <section class="widget widget--greeting" aria-label="Greeting">
       <button id="theme-toggle" class="btn btn--icon greeting-theme-toggle" aria-label="Toggle theme">🌙</button>
       <div id="greeting-time" class="greeting-time">00:00:00</div>
       <div id="greeting-date" class="greeting-date">Loading date…</div>
-      <!-- Greeting message: base text + clickable inline name span -->
-      <!-- The JS splits the greeting into base ("GOOD NIGHT,") and the name span -->
+      <!-- Pesan salam: teks dasar + rentang nama inline yang dapat diklik -->
+      <!-- JS membagi salam menjadi dasar ("SELAMAT MALAM,") dan rentang nama -->
       <div id="greeting-message" class="greeting-message">
         <span id="greeting-base"></span><span
           id="userNameDisplay"
@@ -37,7 +37,7 @@
           aria-label="Click to add your name here"
         ></span>
       </div>
-      <!-- Daily wish: inline-editable sentence below the greeting -->
+      <!-- Keinginan harian: kalimat yang dapat diedit secara inline di bawah salam -->
       <div
         id="userWishDisplay"
         class="greeting-wish"
@@ -45,12 +45,12 @@
         aria-label="Click to edit wish"
       ></div>
     </section>
-    <!-- ===== END GREETING WIDGET ===== -->
+    <!-- ===== AKHIR WIDGET SALAM ===== -->
 
-    <!-- ===== LEFT COLUMN: Timer (fixed height) + Links (stretches to fill) ===== -->
+    <!-- ===== KOLOM KIRI: Timer (tinggi tetap) + Tautan (mereggang untuk mengisi) ===== -->
     <div class="col-left">
 
-      <!-- ===== TIMER WIDGET ===== -->
+      <!-- ===== WIDGET TIMER ===== -->
       <section class="widget widget--timer" aria-label="Focus timer">
         <h2 class="widget-title">
           Pomodoro Focus Timer
@@ -61,20 +61,20 @@
         <div id="timer-display" class="timer-display" aria-live="polite">25:00</div>
         <div id="timer-complete" class="timer-complete" hidden>Session complete!</div>
 
-        <!-- Timer controls: Start, Stop, Reset -->
+        <!-- Kontrol timer: Mulai, Berhenti, Atur Ulang -->
         <div class="timer-controls">
           <button id="timer-start" class="btn btn--primary">Start</button>
           <button id="timer-stop"  class="btn btn--secondary" disabled>Stop</button>
           <button id="timer-reset" class="btn btn--secondary" disabled>Reset</button>
         </div>
       </section>
-      <!-- ===== END TIMER WIDGET ===== -->
+      <!-- ===== AKHIR WIDGET TIMER ===== -->
 
-      <!-- ===== LINKS WIDGET ===== -->
+      <!-- ===== WIDGET TAUTAN ===== -->
       <section class="widget widget--links" aria-label="Quick links">
         <h2 class="widget-title">Quick Links</h2>
 
-        <!-- Label + URL inputs and Add control -->
+        <!-- Input label + URL dan kontrol Tambah -->
         <div class="links-add-form">
           <label for="link-label-input" class="sr-only">Link label</label>
           <input
@@ -96,23 +96,23 @@
         </div>
         <div id="links-validation" class="validation-message" role="alert" aria-live="polite"></div>
 
-        <!-- Links panel rendered by JS as horizontal pills -->
+        <!-- Panel tautan dirender oleh JS sebagai pil horizontal -->
         <ul id="links-list" class="links-list" aria-label="Quick links list"></ul>
         <p id="links-empty" class="empty-state">No links yet. Add one above.</p>
       </section>
-      <!-- ===== END LINKS WIDGET ===== -->
+      <!-- ===== AKHIR WIDGET TAUTAN ===== -->
 
     </div>
-    <!-- ===== END LEFT COLUMN ===== -->
+    <!-- ===== AKHIR KOLOM KIRI ===== -->
 
-    <!-- ===== RIGHT COLUMN: Tasks ===== -->
+    <!-- ===== KOLOM KANAN: Tugas ===== -->
     <div class="col-right">
 
-      <!-- ===== TODO WIDGET ===== -->
+      <!-- ===== WIDGET TODO ===== -->
       <section class="widget widget--todo" aria-label="To-do list">
         <h2 class="widget-title">Tasks</h2>
 
-        <!-- Task input and Add control -->
+        <!-- Input tugas dan kontrol Tambah -->
         <div class="todo-add-form">
           <label for="todo-input" class="sr-only">New task</label>
           <input
@@ -126,22 +126,22 @@
         </div>
         <div id="todo-validation" class="validation-message" role="alert" aria-live="polite"></div>
 
-        <!-- Task list rendered by JS -->
+        <!-- Daftar tugas dirender oleh JS -->
         <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
         <p id="todo-empty" class="empty-state" hidden>No tasks yet. Add one above.</p>
       </section>
-      <!-- ===== END TODO WIDGET ===== -->
+      <!-- ===== AKHIR WIDGET TODO ===== -->
 
     </div>
-    <!-- ===== END RIGHT COLUMN ===== -->
+    <!-- ===== AKHIR KOLOM KANAN ===== -->
 
-    <!-- ===== QUOTES WIDGET ===== -->
-    <!-- Full-width motivational quotes section; content rotated by JS every 10 minutes -->
+    <!-- ===== WIDGET KUTIPAN ===== -->
+    <!-- Bagian kutipan motivasi layar penuh; konten diputar oleh JS setiap 10 menit -->
     <section class="widget widget--quotes" aria-label="Motivational quote">
       <p class="quotes-title">Quote of the day</p>
       <p id="quotes-text" class="quotes-text"></p>
     </section>
-    <!-- ===== END QUOTES WIDGET ===== -->
+    <!-- ===== AKHIR WIDGET KUTIPAN ===== -->
 
   </main>
 
@@ -149,7 +149,7 @@
   <footer class="dashboard-footer">
     <p>&copy; 2026 Ucu. All rights reserved.</p>
   </footer>
-  <!-- ===== END FOOTER ===== -->
+  <!-- ===== AKHIR FOOTER ===== -->
 
   <script src="js/app.js"></script>
 </body>
