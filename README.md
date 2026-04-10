@@ -1,11 +1,11 @@
-# CodingCamp-060426-UcuSaefudin
+# CodingCamp-6Apr26-UcuSaefudin
 # Personal Life Dashboard
 
 Sebuah *personal dashboard* berbasis web yang dirancang untuk meningkatkan produktivitas harian. Proyek ini dibangun dari nol dengan mematuhi aturan ketat: **murni menggunakan HTML, CSS, dan Vanilla JavaScript** tanpa *framework*, *library* eksternal, maupun API pihak ketiga. Seluruh data pengguna disimpan secara aman di perangkat menggunakan `localStorage`.
 
 ## ✨ Fitur Utama
 - **Dynamic Greeting & Inline Editing:** Ucapan yang menyesuaikan waktu secara *real-time*. Dilengkapi fitur UX tingkat lanjut (Click-to-Edit) di mana pengguna bisa mengubah Nama dan *Daily Wish* langsung dengan mengkliknya.
-- **Focus Timer (Pomodoro):** Penghitung mundur 25 menit untuk sesi kerja yang fokus.
+- **Focus Timer (Pomodoro):** Penghitung mundur 25 menit untuk sesi kerja yang fokus, saat sesi fokus habis akan mengeluarkan suara alarm sebagai reminder.
 - **Task Management:** *To-Do List* yang fungsional untuk mencatat tugas harian dan dapat digeser ke atas atau bawah sesuai prioritas.
 - **Quick Links (Pill Style):** Akses cepat ke situs favorit dengan desain *tag/pill* yang modern dan responsif serta dapat di geser posisi link nya sesuai selera.
 - **Motivational Quotes:** Menampilkan kutipan produktivitas kerja yang berganti secara dinamis setiap 1 menit.
