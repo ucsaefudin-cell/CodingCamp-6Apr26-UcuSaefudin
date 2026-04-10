@@ -1,27 +1,23 @@
 /* ============================================================
    CSS CUSTOM PROPERTIES — LIGHT THEME (default)
-   All colour and spacing tokens live here so every widget
-   can reference them without hard-coding values.
-
-   Shorthand aliases (--bg, --surface, --text, etc.) are
-   provided alongside the full --color-* names so both
-   naming conventions work throughout the stylesheet.
+   Design system tokens for the modern SaaS aesthetic.
+   Accent: Indigo (#4f46e5 / #818cf8 dark).
    ============================================================ */
 :root {
-  /* Colours — full names */
-  --color-bg:            #f5f5f5;
+  /* ── Palette ── */
+  --color-bg:            #f8fafc;
   --color-surface:       #ffffff;
-  --color-border:        rgba(0, 0, 0, 0.05);
-  --color-text:          #1a1a1a;
-  --color-text-muted:    #666666;
-  --color-primary:       #4a6cf7;
-  --color-primary-hover: #3a5ce6;
-  --color-secondary:     #6c757d;
-  --color-error:         #d32f2f;
-  --color-success:       #388e3c;
-  --color-completed:     #9e9e9e;
+  --color-border:        rgba(15, 23, 42, 0.08);
+  --color-text:          #1e293b;
+  --color-text-muted:    #64748b;
+  --color-primary:       #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-secondary:     #64748b;
+  --color-error:         #dc2626;
+  --color-success:       #16a34a;
+  --color-completed:     #94a3b8;
 
-  /* Shorthand aliases — required by task 11.1 */
+  /* ── Shorthand aliases (keep backward-compat with JS/existing rules) ── */
   --bg:           var(--color-bg);
   --surface:      var(--color-surface);
   --text:         var(--color-text);
@@ -30,53 +26,66 @@
   --accent:       var(--color-primary);
   --accent-hover: var(--color-primary-hover);
   --danger:       var(--color-error);
-  --shadow:       var(--shadow-md);
 
-  /* Spacing */
+  /* ── Pill (soft-pill) tokens ── */
+  --pill-bg:          rgba(79, 70, 229, 0.1);
+  --pill-text:        #3730a3;
+  --pill-bg-hover:    rgba(79, 70, 229, 0.18);
+  --pill-border:      rgba(79, 70, 229, 0.25);
+  --pill-delete-border: rgba(55, 48, 163, 0.25);
+
+  /* ── Spacing ── */
   --space-xs:  0.25rem;
   --space-sm:  0.5rem;
   --space-md:  1rem;
   --space-lg:  1.5rem;
   --space-xl:  2rem;
 
-  /* Typography */
-  --font-family:   system-ui, -apple-system, sans-serif;
+  /* ── Typography ── */
+  --font-family:   'Inter', system-ui, -apple-system, sans-serif;
   --font-size-sm:  0.875rem;
   --font-size-md:  1rem;
-  --font-size-lg:  1.25rem;
+  --font-size-lg:  1.125rem;
   --font-size-xl:  2rem;
   --font-size-2xl: 3rem;
 
-  /* Borders */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* ── Borders ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.06);
+  /* ── Shadows (multi-layer, light mode) ── */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04),
+               0 1px 6px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 1px 3px rgba(15, 23, 42, 0.04),
+               0 4px 12px rgba(15, 23, 42, 0.06),
+               0 12px 32px rgba(15, 23, 42, 0.06);
+  --shadow:    var(--shadow-md);
+
+  /* ── Transitions ── */
+  --transition-theme: background-color 0.3s ease, color 0.3s ease,
+                      border-color 0.3s ease, box-shadow 0.3s ease;
+  --transition-fast:  0.18s ease;
 }
 
 /* ============================================================
    DARK THEME OVERRIDES
    Applied via data-theme="dark" on <html>.
-   Only colour tokens need to change — layout tokens stay.
+   Cards use a subtle 1px border instead of heavy shadows.
    ============================================================ */
 [data-theme="dark"] {
-  /* Colours — full names */
-  --color-bg:            #1a1a2e;
-  --color-surface:       #16213e;
-  --color-border:        #0f3460;
-  --color-text:          #e8e8e8;
-  --color-text-muted:    #aaaaaa;
-  --color-primary:       #7b9cff;
-  --color-primary-hover: #9ab3ff;
-  --color-secondary:     #9e9e9e;
-  --color-error:         #ef5350;
-  --color-success:       #66bb6a;
-  --color-completed:     #616161;
+  --color-bg:            #0f172a;
+  --color-surface:       #1e293b;
+  --color-border:        rgba(255, 255, 255, 0.1);
+  --color-text:          #f8fafc;
+  --color-text-muted:    #94a3b8;
+  --color-primary:       #818cf8;
+  --color-primary-hover: #a5b4fc;
+  --color-secondary:     #64748b;
+  --color-error:         #f87171;
+  --color-success:       #4ade80;
+  --color-completed:     #475569;
 
-  /* Shorthand aliases — mirror the full names */
   --bg:           var(--color-bg);
   --surface:      var(--color-surface);
   --text:         var(--color-text);
@@ -85,35 +94,22 @@
   --accent:       var(--color-primary);
   --accent-hover: var(--color-primary-hover);
   --danger:       var(--color-error);
-  --shadow:       var(--shadow-md);
 
-  /* Shadows — darker in dark mode */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
+  /* Soft-pill in dark mode */
+  --pill-bg:          rgba(129, 140, 248, 0.15);
+  --pill-text:        #c7d2fe;
+  --pill-bg-hover:    rgba(129, 140, 248, 0.25);
+  --pill-border:      rgba(129, 140, 248, 0.3);
+  --pill-delete-border: rgba(165, 180, 252, 0.25);
 
-/* ============================================================
-   LIGHT THEME PREMIUM ENHANCEMENTS
-   Scoped to the absence of data-theme="dark" so dark mode is
-   completely unaffected.
-   1. Pastel gradient body background — soft lavender → peach/white
-      gives a fresh, modern "morning" feel without being distracting.
-   2. Card border and shadow are already upgraded via the :root tokens
-      above (--color-border and --shadow-md).
-   ============================================================ */
-:root:not([data-theme="dark"]) body,
-html:not([data-theme="dark"]) body {
-  /* Subtle diagonal gradient: light lavender top-left → soft peach/white bottom-right */
-  background: linear-gradient(135deg, #eef2ff 0%, #fdf6f0 100%);
-  /* Keep background-color as a fallback for browsers that don't support gradients */
-  background-color: #eef2ff;
+  /* Dark mode: minimal shadow, rely on border instead */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow:    var(--shadow-md);
 }
 
 /* ============================================================
    RESET / BASE
-   Universal box-sizing reset prevents width/padding surprises.
-   Margin and padding are zeroed so spacing is always intentional
-   via the --space-* tokens defined above.
    ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -123,6 +119,9 @@ html:not([data-theme="dark"]) body {
 
 html {
   font-size: 16px;
+  /* Smooth font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -131,9 +130,14 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   min-height: 100vh;
-  padding: var(--space-md);
-  /* Smooth theme transitions (task 11.1) */
-  transition: background-color 0.3s, color 0.3s;
+  padding: var(--space-lg);
+  transition: var(--transition-theme);
+  line-height: 1.6;
+}
+
+/* Light mode: clean off-white background */
+html:not([data-theme="dark"]) body {
+  background-color: #f8fafc;
 }
 
 /* Screen-reader only utility */
@@ -151,9 +155,6 @@ body {
 
 /* ============================================================
    DASHBOARD GRID LAYOUT
-   The greeting and quotes widgets span full width.
-   The two middle columns (.col-left, .col-right) sit side by side.
-   max-width + margin: 0 auto keeps everything centered. (task 13.1, 20.3)
    ============================================================ */
 .dashboard-grid {
   display: grid;
@@ -163,7 +164,6 @@ body {
   margin: 0 auto;
 }
 
-/* Single-column layout on mobile (task 11.2) */
 @media (max-width: 768px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
@@ -172,12 +172,6 @@ body {
 
 /* ============================================================
    COLUMN WRAPPERS
-   .col-left  — flex column: Timer (natural height) on top,
-                Links (flex-grow: 1) stretches to fill the rest,
-                so its bottom always aligns with the Tasks card.
-   .col-right — flex column: Tasks card fills the full height.
-   Both columns align their bottoms via the grid row height.
-   (task 20.2)
    ============================================================ */
 .col-left,
 .col-right {
@@ -186,23 +180,22 @@ body {
   gap: var(--space-lg);
 }
 
-/* Links card grows to fill whatever height the Tasks card creates */
 .col-left .widget--links {
   flex: 1;
 }
 
 /* ============================================================
-   WIDGET CARD — shared styles for all four widgets
-   Uses --surface, --border, --shadow variables. (task 11.2)
+   WIDGET CARD
+   Light: multi-layer shadow + transparent border.
+   Dark: flat surface + 1px rgba border, no heavy shadow.
    ============================================================ */
 .widget {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   box-shadow: var(--shadow);
-  /* Smooth theme transitions (task 11.1) */
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition: var(--transition-theme);
 }
 
 .widget-title {
@@ -210,31 +203,35 @@ body {
   font-weight: 600;
   margin-bottom: var(--space-md);
   color: var(--color-text);
+  letter-spacing: -0.01em;
 }
 
 /* ============================================================
    SHARED FORM CONTROLS
-   Inputs and buttons are shared across all four widgets.
-   Using a single set of classes keeps the visual language
-   consistent and reduces duplication. The --accent token
-   drives focus rings and primary button colour so both
-   update automatically when the theme changes.
    ============================================================ */
 .input {
   flex: 1;
   padding: var(--space-sm) var(--space-md);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  background-color: var(--surface);
-  color: var(--text);
+  background-color: var(--color-surface);
+  color: var(--color-text);
   font-size: var(--font-size-md);
   font-family: var(--font-family);
   outline: none;
-  transition: border-color 0.15s, background-color 0.3s, color 0.3s;
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast),
+              background-color 0.3s ease,
+              color 0.3s ease;
 }
 
 .input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+[data-theme="dark"] .input:focus {
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
 }
 
 .btn {
@@ -243,23 +240,34 @@ body {
   border-radius: var(--radius-sm);
   font-size: var(--font-size-md);
   font-family: var(--font-family);
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s, opacity 0.15s;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast),
+              opacity var(--transition-fast);
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
+  transform: none !important;
 }
 
-/* Primary button uses --accent and --accent-hover (task 11.1) */
 .btn--primary {
   background-color: var(--accent);
   color: #ffffff;
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
 }
 
 .btn--primary:hover:not(:disabled) {
   background-color: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+
+.btn--primary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btn--secondary {
@@ -267,25 +275,42 @@ body {
   color: #ffffff;
 }
 
+.btn--secondary:hover:not(:disabled) {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
 .btn--icon {
   background: none;
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-lg);
+  font-size: 1rem;
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
-  color: var(--text);
-  transition: border-color 0.15s, color 0.3s;
+  color: var(--color-text-muted);
+  transition: border-color var(--transition-fast),
+              color var(--transition-fast),
+              background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.btn--icon:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: rgba(79, 70, 229, 0.06);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .btn--icon:hover {
+  background-color: rgba(129, 140, 248, 0.1);
 }
 
 /* ============================================================
    VALIDATION MESSAGES
-   Inline error messages adjacent to form inputs. (task 11.4)
-   Uses --danger variable for error colour.
    ============================================================ */
 .validation-message {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--danger);
   min-height: 1.2em;
   margin-top: 4px;
@@ -293,11 +318,10 @@ body {
 
 /* ============================================================
    EMPTY-STATE MESSAGES
-   Shown when a list has no items. (task 11.1)
    ============================================================ */
 .empty-state {
   font-size: var(--font-size-sm);
-  color: var(--text-muted);
+  color: var(--color-text-muted);
   text-align: center;
   padding: var(--space-md) 0;
   font-style: italic;
@@ -305,64 +329,58 @@ body {
 
 /* ============================================================
    GREETING WIDGET
-   Spans full width across both grid columns. (task 11.2)
-   Displays live clock, date, greeting message, and name form.
-   text-align: center keeps the time, date, and greeting centered. (task 13.2)
-   position: relative is the anchor for the absolutely-positioned
-   theme toggle button. (task 16.3)
+   Prominent clock + greeting; softer wish line below.
    ============================================================ */
 .widget--greeting {
-  /* Full-width span across both columns (task 11.2) */
   grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  align-items: center;   /* center children horizontally (task 13.2) */
-  text-align: center;    /* center inline text (task 13.2) */
+  align-items: center;
+  text-align: center;
   gap: var(--space-sm);
-  /* Anchor for the absolutely-positioned theme toggle (task 16.3) */
   position: relative;
+  padding: var(--space-xl) var(--space-lg);
 }
 
-/* Theme toggle pinned to the top-right corner of the greeting card (task 16.3) */
 .greeting-theme-toggle {
   position: absolute;
-  top: var(--space-sm);
-  right: var(--space-sm);
+  top: var(--space-md);
+  right: var(--space-md);
 }
 
 .greeting-time {
   font-size: var(--font-size-2xl);
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.02em;
   color: var(--color-text);
+  line-height: 1;
 }
 
 .greeting-date {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
+/* Prominent greeting — clear visual hierarchy */
 .greeting-message {
   font-size: var(--font-size-xl);
   font-weight: 800;
   color: var(--accent);
-  margin-bottom: var(--space-sm);
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-xs);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
 }
 
-/* ============================================================
-   INLINE NAME EDITING
-   The name portion of the greeting is a clickable span.
-   Hover shows a dashed underline + pointer to signal editability.
-   While editing (--editing class), a subtle opacity shift gives
-   visual feedback that the field is active. (task 19.3, 19.5)
-   ============================================================ */
+/* ── Inline name editing ── */
 .greeting-name-inline {
   cursor: pointer;
   border-bottom: 2px dashed transparent;
-  transition: border-color 0.2s, opacity 0.2s;
-  /* Inherit all typography from the parent greeting-message */
+  transition: border-color 0.2s ease, opacity 0.2s ease;
   font: inherit;
   color: inherit;
   letter-spacing: inherit;
@@ -373,40 +391,31 @@ body {
   opacity: 0.75;
 }
 
-/* Active edit state — applied by JS when contenteditable is set */
 .greeting-name-inline--editing {
   border-bottom-color: currentColor;
   opacity: 0.85;
   outline: none;
-  /* Prevent the browser's default contenteditable focus ring */
   caret-color: currentColor;
 }
 
-/* Placeholder state: shown when no real value is stored (task 22.3) */
 .greeting-name-inline--placeholder {
-  opacity: 0.5;
-  font-weight: 600;   /* slightly lighter than the 800 bold of a real name */
-  letter-spacing: 1px;
+  opacity: 0.45;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
-/* ============================================================
-   DAILY WISH
-   Sentence-case editable line below the greeting. (task 22.6)
-   Smaller than the greeting, centered, with the same
-   click-to-edit affordance as the name span.
-   ============================================================ */
+/* ── Daily wish — softer, smaller than greeting ── */
 .greeting-wish {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   font-weight: 400;
   color: var(--color-text-muted);
-  text-transform: none;   /* sentence case — override the parent uppercase */
-  letter-spacing: 0.3px;
+  text-transform: none;
+  letter-spacing: 0.01em;
   cursor: pointer;
   border-bottom: 1px dashed transparent;
-  transition: border-color 0.2s, opacity 0.2s;
-  /* min-height prevents layout jump between placeholder and real text */
+  transition: border-color 0.2s ease, opacity 0.2s ease;
   min-height: 1.5em;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .greeting-wish:hover {
@@ -414,12 +423,10 @@ body {
   opacity: 0.75;
 }
 
-/* Placeholder state for the wish (task 22.6) */
 .greeting-wish--placeholder {
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
-/* Active edit state for the wish */
 .greeting-wish--editing {
   border-bottom-color: currentColor;
   opacity: 0.85;
@@ -429,8 +436,7 @@ body {
 
 /* ============================================================
    POMODORO INFO ICON & TOOLTIP
-   Inline info icon next to the widget title. The tooltip is
-   shown on hover/focus using pure CSS — no JS required.
+   Pure-CSS tooltip — no JS needed.
    ============================================================ */
 .info-icon {
   position: relative;
@@ -440,7 +446,6 @@ body {
   cursor: default;
   font-size: var(--font-size-md);
   vertical-align: middle;
-  /* Ensure the tooltip can overflow the widget */
   z-index: 10;
 }
 
@@ -450,27 +455,25 @@ body {
   pointer-events: none;
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 10px);
   transform: translateX(-50%);
-  width: 280px;
+  width: 290px;
   background-color: var(--color-text);
   color: var(--color-surface);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.6;
   text-align: left;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-  transition: opacity 0.2s, visibility 0.2s;
-  /* Reset typography inherited from .widget-title */
+  transition: opacity 0.2s ease, visibility 0.2s ease;
   letter-spacing: normal;
   text-transform: none;
   white-space: normal;
   z-index: 100;
 }
 
-/* Small arrow pointing down toward the icon */
 .tooltip::after {
   content: '';
   position: absolute;
@@ -489,21 +492,19 @@ body {
 }
 
 /* ============================================================
-   DRAG-AND-DROP — shared styles
-   Applied to both link pills and task items while dragging.
+   DRAG-AND-DROP — shared visual feedback
    ============================================================ */
 .dragging {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: grabbing !important;
 }
 
 .drag-over {
   outline: 2px dashed var(--accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
 
-/* Grab cursor on draggable items */
 .link-item[draggable="true"],
 .todo-item[draggable="true"] {
   cursor: grab;
@@ -511,7 +512,6 @@ body {
 
 /* ============================================================
    TIMER WIDGET
-   Countdown display and Start / Stop / Reset controls.
    ============================================================ */
 .widget--timer {
   display: flex;
@@ -520,25 +520,22 @@ body {
   gap: var(--space-md);
 }
 
-/* Large monospace font for the timer display (task 11.1) */
 .timer-display {
   font-size: var(--font-size-2xl);
   font-weight: 700;
   font-family: 'Courier New', Courier, monospace;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--color-text);
+  line-height: 1;
 }
 
-/* Visual indicator shown when the Pomodoro session completes (Req 3.6).
-   Uses --color-success so it stands out positively without being alarming. */
 .timer-complete {
   font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--color-success);
 }
 
-/* Flexbox row keeps Start / Stop / Reset buttons evenly spaced. */
 .timer-controls {
   display: flex;
   gap: var(--space-sm);
@@ -546,7 +543,6 @@ body {
 
 /* ============================================================
    TODO WIDGET
-   Task input form, task list, and completed-task styles.
    ============================================================ */
 .widget--todo {
   display: flex;
@@ -563,7 +559,7 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 6px;
   margin-top: var(--space-sm);
 }
 
@@ -571,37 +567,35 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm);
+  padding: 10px var(--space-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background-color: var(--surface);
-  transition: background-color 0.3s, border-color 0.3s;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  transition: var(--transition-theme),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
 }
 
-/* ============================================================
-   COMPLETED TASK STYLES
-   Strikethrough and reduced opacity on the label. (task 11.3)
-   Both .todo-item--completed and .task--completed are supported
-   so JS can apply either class (Req 6.3).
-   ============================================================ */
+.todo-item:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateX(2px);
+}
+
+/* Completed task */
 .todo-item--completed .todo-item__label,
 .task--completed .todo-item__label,
 .completed .todo-item__label {
   text-decoration: line-through;
   color: var(--color-completed);
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
-/* Label text inside each task row.
-   flex:1 lets it grow to fill available space between the
-   checkbox and the action buttons. */
 .todo-item__label {
   flex: 1;
   font-size: var(--font-size-md);
+  line-height: 1.4;
 }
 
-/* Container for the Edit and Delete icon buttons on each task row.
-   Flexbox row with a small gap keeps the buttons tightly grouped. */
 .todo-item__actions {
   display: flex;
   gap: var(--space-xs);
@@ -609,7 +603,6 @@ body {
 
 /* ============================================================
    LINKS WIDGET
-   Label + URL form and quick-link pill buttons with × delete.
    ============================================================ */
 .widget--links {
   display: flex;
@@ -623,51 +616,57 @@ body {
   gap: var(--space-sm);
 }
 
-/* ============================================================
-   LINKS LIST — horizontal pill layout (task 21.1)
-   Pills wrap onto new lines when the container is narrow.
-   ============================================================ */
+/* ── Links list — horizontal wrapping pills ── */
 .links-list {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   margin-top: var(--space-sm);
 }
 
-/* Each link item is a solid-accent pill (task 21.2) */
+/* Soft-pill design: tinted background, darker text, readable on both themes */
 .link-item {
   display: inline-flex;
   align-items: center;
   gap: 0;
-  background-color: var(--accent);
-  border: none;
-  border-radius: 999px;   /* full pill shape */
+  background-color: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  border-radius: 999px;
   padding: 0;
   overflow: hidden;
-  transition: background-color 0.15s;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
 }
 
 .link-item:hover {
-  background-color: var(--accent-hover);
+  background-color: var(--pill-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
-/* Link label button — plain white text, no underline (task 21.3) */
+[data-theme="dark"] .link-item:hover {
+  box-shadow: 0 4px 12px rgba(129, 140, 248, 0.25);
+}
+
+/* Link label button */
 .link-item__btn {
   background: none;
   border: none;
-  color: #ffffff;
+  color: var(--pill-text);
   font-size: var(--font-size-sm);
   font-family: var(--font-family);
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   text-decoration: none;
-  /* Use flex so icon + text align on the same baseline */
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: var(--space-xs) var(--space-sm) var(--space-xs) var(--space-md);
+  padding: 6px var(--space-sm) 6px var(--space-md);
   line-height: 1.4;
+  transition: color var(--transition-fast);
 }
 
 /* Favicon inside each pill */
@@ -677,41 +676,37 @@ body {
   border-radius: 2px;
   object-fit: contain;
   flex-shrink: 0;
-  /* Smooth appearance once loaded */
-  transition: opacity 0.2s;
+  transition: opacity 0.2s ease;
 }
 
-/* Fallback when the favicon fails to load: show a neutral globe glyph */
 .link-item__favicon--error {
   opacity: 0;
   width: 0;
   margin: 0;
 }
 
-/* × delete button — compact, white, sits flush inside the pill (task 21.4) */
+/* × delete button */
 .link-item__delete {
   background: none;
   border: none;
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  border-left: 1px solid var(--pill-delete-border);
+  color: var(--pill-text);
   font-size: var(--font-size-md);
   line-height: 1;
   cursor: pointer;
-  padding: var(--space-xs) var(--space-sm);
-  opacity: 0.8;
-  transition: opacity 0.15s;
+  padding: 6px var(--space-sm);
+  opacity: 0.6;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
   font-family: var(--font-family);
 }
 
 .link-item__delete:hover {
   opacity: 1;
+  color: var(--danger);
 }
 
 /* ============================================================
    FOOTER
-   Minimal, unobtrusive footer at the bottom of the page.
-   Centered text, muted color, small font, and a top border
-   to visually separate it from the main content. (task 14.3)
    ============================================================ */
 .dashboard-footer {
   text-align: center;
@@ -720,14 +715,11 @@ body {
   border-top: 1px solid var(--color-border);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
-  transition: border-color 0.3s, color 0.3s;
+  transition: var(--transition-theme);
 }
 
 /* ============================================================
    QUOTES WIDGET
-   Full-width section spanning both grid columns.
-   Centered, italic quote text in accent color to match the
-   existing "Simplicity" visual design. (task 15.5)
    ============================================================ */
 .widget--quotes {
   grid-column: 1 / -1;
@@ -739,18 +731,18 @@ body {
 }
 
 .quotes-title {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: var(--color-text-muted);
 }
 
-/* The quote text itself: italic, accent color, slightly larger */
 .quotes-text {
   font-size: var(--font-size-lg);
   font-style: italic;
   color: var(--accent);
-  max-width: 700px;
-  line-height: 1.6;
+  max-width: 680px;
+  line-height: 1.7;
+  font-weight: 400;
 }
