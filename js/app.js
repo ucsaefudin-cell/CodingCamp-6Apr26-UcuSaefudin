@@ -401,6 +401,133 @@ const timerWidget = {
   intervalId: null,
 
   /**
+   * Shared AudioContext instance.
+   * Created lazily on the first Start click so it is always
+   * created inside a user-gesture, satisfying browser autoplay policy.
+   * @type {AudioContext|null}
+   */
+  _audioCtx: null,
+
+  /** Master GainNode for the active alarm, or null when silent. */
+  _alarmGain: null,
+
+  /** setTimeout id for the auto-mute fallback, or null. */
+  _alarmAutoStopId: null,
+
+  /**
+   * Create (or resume) the AudioContext on the first user interaction.
+   * Must be called from within a click handler to satisfy the browser's
+   * autoplay policy and guarantee the alarm will play later.
+   */
+  _unlockAudio() {
+    if (!window.AudioContext && !window.webkitAudioContext) return;
+    if (!this._audioCtx) {
+      this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    // Resume in case the context was suspended (e.g. tab was backgrounded)
+    if (this._audioCtx.state === 'suspended') {
+      this._audioCtx.resume();
+    }
+  },
+
+  /**
+   * Play a continuous alarm for ALARM_DURATION seconds using the Web
+   * Audio API.  The alarm is a repeating pattern of short 880 Hz beeps
+   * spaced 400 ms apart, scheduled ahead of time so the browser's audio
+   * thread never gaps.  A master GainNode is stored so _muteAlarm() can
+   * ramp it to silence instantly without audible clicks.
+   */
+  _playAlarm() {
+    const ctx = this._audioCtx;
+    if (!ctx) return;
+
+    const ALARM_DURATION = 10;    // total seconds the alarm runs
+    const BEEP_FREQ      = 880;   // Hz — A5, clear and attention-grabbing
+    const BEEP_DURATION  = 0.22;  // seconds each beep sounds
+    const BEEP_SPACING   = 0.4;   // seconds between beep starts
+    const VOLUME         = 0.35;
+
+    // Master gain — ramping this to 0 is how _muteAlarm() silences everything
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(VOLUME, ctx.currentTime);
+    masterGain.connect(ctx.destination);
+    this._alarmGain = masterGain;
+
+    // Schedule all beeps for the full alarm window
+    const beepCount = Math.floor(ALARM_DURATION / BEEP_SPACING);
+    for (let i = 0; i < beepCount; i++) {
+      const startAt = ctx.currentTime + i * BEEP_SPACING;
+      if (startAt >= ctx.currentTime + ALARM_DURATION) break;
+
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type            = 'sine';
+      osc.frequency.value = BEEP_FREQ;
+
+      // Per-beep envelope: attack → exponential decay to near-silence
+      gain.gain.setValueAtTime(1, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + BEEP_DURATION);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(startAt);
+      osc.stop(startAt + BEEP_DURATION + 0.05);
+    }
+
+    // Auto-mute after ALARM_DURATION seconds if user hasn't clicked
+    this._alarmAutoStopId = setTimeout(() => this._muteAlarm(), ALARM_DURATION * 1000);
+  },
+
+  /**
+   * Immediately silence the alarm and restore normal UI state.
+   * Safe to call multiple times (idempotent).
+   */
+  _muteAlarm() {
+    // Ramp master gain to silence over 80 ms to avoid a click
+    if (this._alarmGain && this._audioCtx) {
+      const ctx = this._audioCtx;
+      this._alarmGain.gain.cancelScheduledValues(ctx.currentTime);
+      this._alarmGain.gain.setValueAtTime(this._alarmGain.gain.value, ctx.currentTime);
+      this._alarmGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.08);
+      this._alarmGain = null;
+    }
+
+    // Cancel the auto-stop timeout if muted early
+    if (this._alarmAutoStopId !== null) {
+      clearTimeout(this._alarmAutoStopId);
+      this._alarmAutoStopId = null;
+    }
+
+    // Restore Stop button and hide hint
+    this._setAlarmUI(false);
+  },
+
+  /**
+   * Toggle the "MUTE ALARM" UI state on the Stop button.
+   *
+   * @param {boolean} alarming - true while alarm is ringing, false otherwise.
+   */
+  _setAlarmUI(alarming) {
+    const stopBtn = document.getElementById('timer-stop');
+
+    if (stopBtn) {
+      if (alarming) {
+        stopBtn.textContent = 'MUTE ALARM';
+        stopBtn.disabled    = false;
+        stopBtn.classList.add('btn--mute');
+        stopBtn.classList.remove('btn--secondary');
+      } else {
+        stopBtn.textContent = 'Stop';
+        stopBtn.classList.remove('btn--mute');
+        stopBtn.classList.add('btn--secondary');
+        stopBtn.disabled = true;
+      }
+    }
+  },
+
+  /**
    * Initialise the timer widget.
    * Sets remaining to 1500, renders the display, and binds buttons.
    * (Req 3.1, 3.7)
@@ -408,6 +535,8 @@ const timerWidget = {
   init() {
     this.remaining = 1500;
     this.intervalId = null;
+    this._alarmGain = null;
+    this._alarmAutoStopId = null;
     this.render();
     this.setButtonStates(false);
 
@@ -419,9 +548,17 @@ const timerWidget = {
     const startBtn = document.getElementById('timer-start');
     if (startBtn) startBtn.addEventListener('click', () => this.start());
 
-    // Bind Stop button (Req 3.3)
+    // Stop button doubles as MUTE ALARM when the alarm is ringing
     const stopBtn = document.getElementById('timer-stop');
-    if (stopBtn) stopBtn.addEventListener('click', () => this.stop());
+    if (stopBtn) {
+      stopBtn.addEventListener('click', () => {
+        if (this._alarmGain !== null) {
+          this._muteAlarm();   // alarm is active — mute it
+        } else {
+          this.stop();         // normal pause behaviour
+        }
+      });
+    }
 
     // Bind Reset button (Req 3.5)
     const resetBtn = document.getElementById('timer-reset');
@@ -435,6 +572,9 @@ const timerWidget = {
    */
   start() {
     if (this.intervalId !== null) return; // already running
+    // Unlock / resume AudioContext inside this user gesture so the
+    // alarm is guaranteed to play when the session ends.
+    this._unlockAudio();
     this.intervalId = setInterval(() => this.tick(), 1000);
     this.setButtonStates(true);
   },
@@ -456,6 +596,8 @@ const timerWidget = {
    */
   tick() {
     this.remaining -= 1;
+    // Clamp to 0 so it never goes negative
+    if (this.remaining < 0) this.remaining = 0;
     this.render();
     if (this.remaining <= 0) {
       this.onComplete();
@@ -467,6 +609,8 @@ const timerWidget = {
    * Re-renders the display and resets button states. (Req 3.5)
    */
   reset() {
+    // Kill any active alarm first (also restores Stop button)
+    this._muteAlarm();
     this.stop();
     this.remaining = 1500;
     this.render();
@@ -485,6 +629,9 @@ const timerWidget = {
     this.stop();
     const completeEl = document.getElementById('timer-complete');
     if (completeEl) completeEl.hidden = false;
+    // Show MUTE ALARM button + hint, then start the 10-second alarm
+    this._setAlarmUI(true);
+    this._playAlarm();
   },
 
   /**
