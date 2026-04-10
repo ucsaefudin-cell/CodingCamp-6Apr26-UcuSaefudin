@@ -168,6 +168,9 @@ html:not([data-theme="dark"]) body {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
+  .links-add-form {
+    flex-wrap: wrap;
+  }
 }
 
 /* ============================================================
@@ -612,8 +615,16 @@ html:not([data-theme="dark"]) body {
 
 .links-add-form {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Inputs share available space equally; min-width:0 prevents
+   flex children from overflowing their container */
+.links-add-form .input {
+  flex: 1;
+  min-width: 0;
 }
 
 /* ── Links list — horizontal wrapping pills ── */
