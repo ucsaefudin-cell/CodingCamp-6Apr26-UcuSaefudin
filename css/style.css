@@ -662,8 +662,30 @@ body {
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
+  /* Use flex so icon + text align on the same baseline */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: var(--space-xs) var(--space-sm) var(--space-xs) var(--space-md);
   line-height: 1.4;
+}
+
+/* Favicon inside each pill */
+.link-item__favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  object-fit: contain;
+  flex-shrink: 0;
+  /* Smooth appearance once loaded */
+  transition: opacity 0.2s;
+}
+
+/* Fallback when the favicon fails to load: show a neutral globe glyph */
+.link-item__favicon--error {
+  opacity: 0;
+  width: 0;
+  margin: 0;
 }
 
 /* × delete button — compact, white, sits flush inside the pill (task 21.4) */

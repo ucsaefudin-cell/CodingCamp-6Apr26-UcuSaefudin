@@ -1103,11 +1103,31 @@ const linksWidget = {
     li.dataset.id = link.id;
     li.draggable = true;
 
+    // --- Favicon icon: extracted domain used only for the icon src ---
+    const favicon = document.createElement('img');
+    favicon.className = 'link-item__favicon';
+    favicon.width  = 16;
+    favicon.height = 16;
+    favicon.alt    = '';          // decorative — label already describes the link
+    favicon.setAttribute('aria-hidden', 'true');
+    try {
+      const domain = new URL(link.url).hostname;
+      favicon.src = `https://www.google.com/s2/favicons?sz=32&domain=${domain}`;
+    } catch (_) {
+      // Malformed URL — leave src empty so the CSS fallback kicks in
+      favicon.src = '';
+    }
+    // Hide broken-image icon; CSS fallback background takes over
+    favicon.addEventListener('error', () => favicon.classList.add('link-item__favicon--error'));
+
     // --- Link button: opens URL in new tab (Req 8.5) ---
     const linkBtn = document.createElement('button');
     linkBtn.className = 'link-item__btn';
-    linkBtn.textContent = link.label;
     linkBtn.setAttribute('aria-label', `Open ${link.label}`);
+
+    // Icon goes BEFORE the label text inside the button
+    linkBtn.appendChild(favicon);
+    linkBtn.appendChild(document.createTextNode(link.label));
     linkBtn.addEventListener('click', () => {
       window.open(link.url, '_blank', 'noopener,noreferrer');
     });
