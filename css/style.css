@@ -428,6 +428,88 @@ body {
 }
 
 /* ============================================================
+   POMODORO INFO ICON & TOOLTIP
+   Inline info icon next to the widget title. The tooltip is
+   shown on hover/focus using pure CSS — no JS required.
+   ============================================================ */
+.info-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-xs);
+  cursor: default;
+  font-size: var(--font-size-md);
+  vertical-align: middle;
+  /* Ensure the tooltip can overflow the widget */
+  z-index: 10;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: 280px;
+  background-color: var(--color-text);
+  color: var(--color-surface);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: opacity 0.2s, visibility 0.2s;
+  /* Reset typography inherited from .widget-title */
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: normal;
+  z-index: 100;
+}
+
+/* Small arrow pointing down toward the icon */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-text);
+}
+
+.info-icon:hover .tooltip,
+.info-icon:focus .tooltip,
+.info-icon:focus-within .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ============================================================
+   DRAG-AND-DROP — shared styles
+   Applied to both link pills and task items while dragging.
+   ============================================================ */
+.dragging {
+  opacity: 0.4;
+  cursor: grabbing !important;
+}
+
+.drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Grab cursor on draggable items */
+.link-item[draggable="true"],
+.todo-item[draggable="true"] {
+  cursor: grab;
+}
+
+/* ============================================================
    TIMER WIDGET
    Countdown display and Start / Stop / Reset controls.
    ============================================================ */

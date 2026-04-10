@@ -539,6 +539,9 @@ const todoWidget = {
   /** In-memory array of Task objects. Populated by init(). */
   tasks: [],
 
+  /** Tracks the id of the task currently being dragged. */
+  _dragId: null,
+
   /**
    * Initialise the todo widget.
    * Reads persisted tasks from storage, renders the list, and wires
@@ -741,6 +744,7 @@ const todoWidget = {
    * Build and return a DOM element representing a single task.
    * Includes a completion checkbox, label, edit button, and delete button.
    * Applies the `task--completed` CSS class when the task is completed.
+   * Supports HTML5 drag-and-drop for reordering.
    * (Req 5.1, 6.1, 6.3, 6.4)
    *
    * @param {{ id: string, label: string, completed: boolean }} task
@@ -751,6 +755,7 @@ const todoWidget = {
     // Apply completed class for strikethrough styling (Req 6.3, 7.7)
     li.className = 'todo-item' + (task.completed ? ' todo-item--completed task--completed' : '');
     li.dataset.id = task.id;
+    li.draggable = true;
 
     // --- Completion checkbox (Req 6.1) ---
     const checkbox = document.createElement('input');
@@ -788,6 +793,43 @@ const todoWidget = {
     li.appendChild(checkbox);
     li.appendChild(labelSpan);
     li.appendChild(actions);
+
+    // --- Drag-and-drop events ---
+    li.addEventListener('dragstart', (e) => {
+      this._dragId = task.id;
+      e.dataTransfer.effectAllowed = 'move';
+      requestAnimationFrame(() => li.classList.add('dragging'));
+    });
+
+    li.addEventListener('dragend', () => {
+      li.classList.remove('dragging');
+      document.querySelectorAll('#todo-list .drag-over').forEach(el => el.classList.remove('drag-over'));
+    });
+
+    li.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (task.id !== this._dragId) li.classList.add('drag-over');
+    });
+
+    li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
+
+    li.addEventListener('drop', (e) => {
+      e.preventDefault();
+      li.classList.remove('drag-over');
+      if (!this._dragId || this._dragId === task.id) return;
+
+      const fromIdx = this.tasks.findIndex(t => t.id === this._dragId);
+      const toIdx   = this.tasks.findIndex(t => t.id === task.id);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      // Reorder in-memory array
+      const [moved] = this.tasks.splice(fromIdx, 1);
+      this.tasks.splice(toIdx, 0, moved);
+
+      this.persist();
+      this.renderList();
+    });
 
     return li;
   },
@@ -893,6 +935,9 @@ const todoWidget = {
 const linksWidget = {
   /** In-memory array of Link objects. Populated by init(). */
   links: [],
+
+  /** Tracks the id of the link currently being dragged. */
+  _dragId: null,
 
   /**
    * Initialise the links widget.
@@ -1047,6 +1092,7 @@ const linksWidget = {
    * Build and return a DOM element representing a single link.
    * Rendered as a horizontal pill: label button on the left,
    * compact × delete button on the right. (task 21.4, Req 8.5)
+   * Supports HTML5 drag-and-drop for reordering.
    *
    * @param {{ id: string, label: string, url: string }} link
    * @returns {HTMLElement} An <li> element for the link.
@@ -1055,6 +1101,7 @@ const linksWidget = {
     const li = document.createElement('li');
     li.className = 'link-item';
     li.dataset.id = link.id;
+    li.draggable = true;
 
     // --- Link button: opens URL in new tab (Req 8.5) ---
     const linkBtn = document.createElement('button');
@@ -1071,6 +1118,45 @@ const linksWidget = {
     deleteBtn.textContent = '×';
     deleteBtn.setAttribute('aria-label', `Delete link: ${link.label}`);
     deleteBtn.addEventListener('click', () => this.deleteLink(link.id));
+
+    // --- Drag-and-drop events ---
+    li.addEventListener('dragstart', (e) => {
+      this._dragId = link.id;
+      e.dataTransfer.effectAllowed = 'move';
+      // Slight delay so the ghost image renders before opacity drops
+      requestAnimationFrame(() => li.classList.add('dragging'));
+    });
+
+    li.addEventListener('dragend', () => {
+      li.classList.remove('dragging');
+      // Clean up any lingering drag-over highlights
+      document.querySelectorAll('#links-list .drag-over').forEach(el => el.classList.remove('drag-over'));
+    });
+
+    li.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (link.id !== this._dragId) li.classList.add('drag-over');
+    });
+
+    li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
+
+    li.addEventListener('drop', (e) => {
+      e.preventDefault();
+      li.classList.remove('drag-over');
+      if (!this._dragId || this._dragId === link.id) return;
+
+      const fromIdx = this.links.findIndex(l => l.id === this._dragId);
+      const toIdx   = this.links.findIndex(l => l.id === link.id);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      // Reorder in-memory array
+      const [moved] = this.links.splice(fromIdx, 1);
+      this.links.splice(toIdx, 0, moved);
+
+      this.persist();
+      this.renderPanel();
+    });
 
     li.appendChild(linkBtn);
     li.appendChild(deleteBtn);
