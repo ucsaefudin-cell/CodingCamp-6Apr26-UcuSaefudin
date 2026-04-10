@@ -6,8 +6,8 @@ Sebuah *personal dashboard* berbasis web yang dirancang untuk meningkatkan produ
 ## ✨ Fitur Utama
 - **Dynamic Greeting & Inline Editing:** Ucapan yang menyesuaikan waktu secara *real-time*. Dilengkapi fitur UX tingkat lanjut (Click-to-Edit) di mana pengguna bisa mengubah Nama dan *Daily Wish* langsung dengan mengkliknya.
 - **Focus Timer (Pomodoro):** Penghitung mundur 25 menit untuk sesi kerja yang fokus.
-- **Task Management:** *To-Do List* yang fungsional untuk mencatat tugas harian.
-- **Quick Links (Pill Style):** Akses cepat ke situs favorit dengan desain *tag/pill* yang modern dan responsif.
+- **Task Management:** *To-Do List* yang fungsional untuk mencatat tugas harian dan dapat digeser ke atas atau bawah sesuai prioritas.
+- **Quick Links (Pill Style):** Akses cepat ke situs favorit dengan desain *tag/pill* yang modern dan responsif serta dapat di geser posisi link nya sesuai selera.
 - **Motivational Quotes:** Menampilkan kutipan produktivitas kerja yang berganti secara dinamis setiap 1 menit.
 - **Theme Toggle:** Mendukung *Dark Mode* dan *Light Mode* (dengan desain latar belakang gradien *pastel*).
 
